@@ -58,11 +58,11 @@ class LoginPage extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       ColumnBuilder(
-                        itemCount: 2,
+                        itemCount: inputTextField.inputs.length,
                         itemBuilder: (_, int i) {
                           InputField input = inputTextField.inputs[i];
                           bool isUsername = input.label.contains("username");
-                          bool isPassword = input.label.contains("password");
+                          bool isPassword = input.label == "Inserisci password";
                           if (isUsername || isPassword) {
                             return CustomTextField(
                               label: input.label,

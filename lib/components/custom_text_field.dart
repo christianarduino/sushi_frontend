@@ -43,6 +43,10 @@ class CustomTextField extends StatelessWidget {
           inputTextField.setData(text, label);
           print(inputTextField.username);
         },
+        validator: (String text) {
+          if (text.isEmpty) return "Campo vuoto";
+          return inputTextField.validate(label, text);
+        },
       ),
     );
   }
