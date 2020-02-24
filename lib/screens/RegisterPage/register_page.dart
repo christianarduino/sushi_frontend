@@ -1,71 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:sushi/components/arrow_back.dart';
+import 'package:redux/redux.dart';
 import 'package:sushi/components/background.dart';
 import 'package:sushi/components/custom_button.dart';
 import 'package:sushi/components/custom_text_field.dart';
+import 'package:sushi/model/Response/ResponseStatus.dart';
 import 'package:sushi/model/TextField/InputField.dart';
+import 'package:sushi/network/RegisterPage/register_network.dart';
+import 'package:sushi/redux/actions/UserActions/user_actions.dart';
+import 'package:sushi/redux/store/AppState.dart';
 import 'package:sushi/utils/column_builder.dart';
+import 'package:sushi/utils/dialog_message.dart';
 import 'package:sushi/utils/input_text_field.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
+  @override
+  _RegisterPageState createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final InputTextField inputTextField = InputTextField();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Theme.of(context).primaryColor,
+        ),
+        title: Text(
+          "Sign Up",
+          style: TextStyle(
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
+        elevation: 5,
+        backgroundColor: Colors.white,
+      ),
       body: SafeArea(
         child: Stack(
           children: <Widget>[
             Background(),
-            Align(
-              alignment: Alignment.topCenter,
-              child: Padding(
-                padding: EdgeInsets.only(
-                  top: ScreenUtil().setHeight(20),
-                ),
-                child: Text(
-                  "Sign Up",
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(25),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                top: ScreenUtil().setHeight(25),
-                left: ScreenUtil().setWidth(25),
-              ),
-              child: ArrowBack(
-                color: Theme.of(context).primaryColor,
-                size: ScreenUtil().setWidth(30),
-              ),
-            ),
-            Align(
+            Container(
               alignment: Alignment.center,
               child: Form(
+                key: _formKey,
                 child: ListView(
                   padding: EdgeInsets.symmetric(
                     horizontal: ScreenUtil().setWidth(50),
                   ),
                   shrinkWrap: true,
                   children: <Widget>[
-                    SizedBox(
-                      height: ScreenUtil().setHeight(50),
-                    ),
                     ColumnBuilder(
                       itemCount: inputTextField.inputs.length,
                       itemBuilder: (_, int i) {
                         InputField input = inputTextField.inputs[i];
                         bool isConfirm = input.label.contains("Conferma");
                         return CustomTextField(
-                          label: input.label,
-                          textInputAction: isConfirm
-                              ? TextInputAction.done
-                              : TextInputAction.next,
-                          isObscured: input.isObscured,
-                          kType: input.kType,
+                          inputField: input,
                           padding: isConfirm ? EdgeInsets.zero : null,
                           inputTextField: inputTextField,
                         );
@@ -74,10 +69,28 @@ class RegisterPage extends StatelessWidget {
                     SizedBox(
                       height: ScreenUtil().setHeight(55),
                     ),
-                    CustomButton(
-                      label: "Registrati",
-                      onTap: () {},
-                    ),
+                    StoreConnector<AppState, Store<AppState>>(
+                        converter: (store) => store,
+                        builder: (context, store) {
+                          return CustomButton(
+                            label: "Registrati",
+                            onTap: () async {
+                              if (_formKey.currentState.validate()) {
+                                ResponseStatus status =
+                                    await RegisterNetwork.signUp(
+                                        inputTextField);
+                                if (!status.success) {
+                                  return DialogMessage.errorWithMessage(
+                                    context,
+                                    status.data,
+                                  );
+                                }
+
+                                store.dispatch(SaveUser(status.data));
+                              }
+                            },
+                          );
+                        }),
                     SizedBox(
                       height: ScreenUtil().setHeight(10),
                     ),

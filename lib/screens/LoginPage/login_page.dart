@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:redux/redux.dart';
 import 'package:sushi/components/background.dart';
 import 'package:sushi/components/custom_button.dart';
 import 'package:sushi/components/custom_outline_button.dart';
 import 'package:sushi/components/custom_text_field.dart';
+import 'package:sushi/model/Response/ResponseStatus.dart';
 import 'package:sushi/model/TextField/InputField.dart';
+import 'package:sushi/network/LoginPage/login_network.dart';
+import 'package:sushi/redux/actions/UserActions/user_actions.dart';
+import 'package:sushi/redux/store/AppState.dart';
 import 'package:sushi/screens/RegisterPage/register_page.dart';
 import 'package:sushi/utils/column_builder.dart';
 import 'package:sushi/utils/input_text_field.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final InputTextField inputTextField = InputTextField();
 
   @override
@@ -65,12 +76,7 @@ class LoginPage extends StatelessWidget {
                           bool isPassword = input.label == "Inserisci password";
                           if (isUsername || isPassword) {
                             return CustomTextField(
-                              label: input.label,
-                              textInputAction: isPassword
-                                  ? TextInputAction.done
-                                  : TextInputAction.next,
-                              isObscured: input.isObscured,
-                              kType: input.kType,
+                              inputField: input,
                               padding: isPassword ? EdgeInsets.zero : null,
                               inputTextField: inputTextField,
                             );
@@ -82,10 +88,23 @@ class LoginPage extends StatelessWidget {
                       SizedBox(
                         height: ScreenUtil().setHeight(65),
                       ),
-                      CustomButton(
-                        label: "Accedi",
-                        onTap: () {},
-                      )
+                      StoreConnector<AppState, Store<AppState>>(
+                          converter: (store) => store,
+                          builder: (context, store) {
+                            return CustomButton(
+                              label: "Accedi",
+                              onTap: () async {
+                                ResponseStatus responseStatus =
+                                    await LoginNetwork.login(inputTextField);
+                                if (!responseStatus.success) {
+                                  //modal con il messaggio
+                                }
+
+                                store.dispatch(SaveUser(responseStatus.data));
+                                print(store.state.user.name);
+                              },
+                            );
+                          })
                     ],
                   ),
                 ),

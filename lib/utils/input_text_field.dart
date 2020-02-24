@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:sushi/model/TextField/InputField.dart';
+import 'package:sushi/utils/functions.dart';
 
 class InputTextField {
   String name;
@@ -12,8 +14,14 @@ class InputTextField {
   String groupDescription;
 
   List<InputField> inputs = [
-    InputField(label: "Inserisci nome"),
-    InputField(label: "Inserisci cognome"),
+    InputField(
+      label: "Inserisci nome",
+      textCapitalization: TextCapitalization.words,
+    ),
+    InputField(
+      label: "Inserisci cognome",
+      textCapitalization: TextCapitalization.words,
+    ),
     InputField(label: "Inserisci username"),
     InputField(label: "Inserisci email"),
     InputField(label: "Inserisci password", isObscured: true),
@@ -23,23 +31,22 @@ class InputTextField {
   setData(String inputValue, String label) {
     switch (label) {
       case "Inserisci username":
-        username = inputValue;
-        print(username);
+        this.username = inputValue;
         break;
-      case "Insersici password":
-        password = inputValue;
+      case "Inserisci password":
+        this.password = inputValue;
         break;
       case "Inserisci nome":
-        name = inputValue;
+        this.name = capitalize(inputValue);
         break;
       case "Inserisci cognome":
-        surname = inputValue;
+        this.surname = capitalize(inputValue);
         break;
       case "Inserisci email":
-        email = inputValue;
+        this.email = inputValue;
         break;
       case "Conferma password":
-        confirmPassword = inputValue;
+        this.confirmPassword = inputValue;
         break;
     }
   }
@@ -52,7 +59,7 @@ class InputTextField {
         }
         break;
       case "Inserisci email":
-        if (value.contains("@")) {
+        if (!value.contains("@")) {
           return "Inserisci un'email valida";
         }
         break;

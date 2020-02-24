@@ -7,8 +7,8 @@ class LoginRequestModel {
   LoginRequestModel(this.username, this.password);
 
   LoginRequestModel.fromInput(InputTextField inputData)
-      : username = inputData.username,
-        password = inputData.password;
+      : this.username = inputData.username,
+        this.password = inputData.password;
 
   Map<String, String> toMap() {
     return {

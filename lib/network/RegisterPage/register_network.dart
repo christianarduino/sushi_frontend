@@ -1,13 +1,14 @@
 import 'package:sushi/api/make_request.dart';
-import 'package:sushi/model/Request/LoginRequestModel.dart';
+import 'package:sushi/model/Request/RegisterRequestModel.dart';
 import 'package:sushi/model/Response/ResponseStatus.dart';
 import 'package:sushi/model/Store/User.dart';
 import 'package:sushi/utils/input_text_field.dart';
 
-class LoginNetwork {
-  static Future<ResponseStatus> login(InputTextField inputData) async {
-    LoginRequestModel model = LoginRequestModel.fromInput(inputData);
-    dynamic decodedJson = await MakeRequest.post("user/login", model.toMap());
+class RegisterNetwork {
+  static Future<ResponseStatus> signUp(InputTextField inputData) async {
+    RegisterRequestModel model = RegisterRequestModel.fromInput(inputData);
+    dynamic decodedJson =
+        await MakeRequest.post("user/register", model.toMap());
     if (decodedJson['error']) {
       return ResponseStatus(false, decodedJson['message']);
     } else {
