@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:redux/redux.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 import 'package:sushi/redux/reducers/index.dart';
 import 'package:sushi/redux/store/AppState.dart';
 import 'package:sushi/screens/LoginPage/login_page.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
-  final Store<AppState> store = Store(reducers, initialState: AppState());
+  final Store<AppState> store = Store(
+    reducers,
+    initialState: AppState(),
+    middleware: [thunkMiddleware],
+  );
   await DotEnv().load('.env');
   runApp(SushiApp(store: store));
 }

@@ -8,10 +8,9 @@ import 'package:http/http.dart' as http;
 class MakeRequest {
   static String url = DotEnv().env['SERVER_URL'];
 
-  static Future get(String endpoint, Map<String, String> params) async {
+  static Future get(String endpoint) async {
     try {
-      Uri uri = Uri.https(url, endpoint, params);
-      http.Response response = await http.get(uri);
+      http.Response response = await http.get(url + endpoint);
       final responseJson = await jsonDecode(response.body);
       return responseJson;
     } on SocketException {
