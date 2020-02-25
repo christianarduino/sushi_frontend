@@ -14,7 +14,7 @@ import 'package:sushi/redux/store/AppState.dart';
 import 'package:sushi/screens/HomePage/home_page.dart';
 import 'package:sushi/utils/column_builder.dart';
 import 'package:sushi/utils/dialog_message.dart';
-import 'package:sushi/utils/input_text_field.dart';
+import 'package:sushi/utils/field_user.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -23,7 +23,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final InputTextField inputTextField = InputTextField();
+  final FieldUser inputTextField = FieldUser();
 
   @override
   Widget build(BuildContext context) {
@@ -60,12 +60,15 @@ class _RegisterPageState extends State<RegisterPage> {
                         itemCount: inputTextField.inputs.length,
                         itemBuilder: (_, int i) {
                           InputField input = inputTextField.inputs[i];
-                          bool isConfirm = input.label.contains("Conferma");
-                          return CustomTextField(
-                            inputField: input,
-                            padding: isConfirm ? EdgeInsets.zero : null,
-                            inputTextField: inputTextField,
-                          );
+                          if (!input.label.contains("gruppo")) {
+                            bool isConfirm = input.label.contains("Conferma");
+                            return CustomTextField(
+                              inputField: input,
+                              padding: isConfirm ? EdgeInsets.zero : null,
+                              inputTextField: inputTextField,
+                            );
+                          }
+                          return SizedBox.shrink();
                         },
                       ),
                       SizedBox(

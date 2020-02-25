@@ -1,4 +1,4 @@
-import 'package:sushi/utils/input_text_field.dart';
+import 'package:sushi/utils/field_user.dart';
 
 class RegisterRequestModel {
   String name;
@@ -10,7 +10,7 @@ class RegisterRequestModel {
   RegisterRequestModel(
       this.name, this.surname, this.username, this.email, this.password);
 
-  RegisterRequestModel.fromInput(InputTextField inputData)
+  RegisterRequestModel.fromInput(FieldUser inputData)
       : name = inputData.name,
         surname = inputData.surname,
         username = inputData.username,

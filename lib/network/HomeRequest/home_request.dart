@@ -5,12 +5,12 @@ import 'package:sushi/model/Response/ResponseStatus.dart';
 class HomeRequest {
   static Future<ResponseStatus> getGroups(String userId) async {
     try {
-      print(userId);
       dynamic decodedJson = await MakeRequest.get("group/user/$userId");
 
       if (decodedJson['error'])
         return ResponseStatus(false, decodedJson['message']);
 
+      print(userId);
       Groups groups = Groups.fromJson(decodedJson);
       return ResponseStatus(true, groups);
     } catch (e) {

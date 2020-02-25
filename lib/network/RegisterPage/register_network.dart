@@ -2,10 +2,10 @@ import 'package:sushi/api/make_request.dart';
 import 'package:sushi/model/Request/RegisterRequestModel.dart';
 import 'package:sushi/model/Response/ResponseStatus.dart';
 import 'package:sushi/model/Store/User.dart';
-import 'package:sushi/utils/input_text_field.dart';
+import 'package:sushi/utils/field_user.dart';
 
 class RegisterNetwork {
-  static Future<ResponseStatus> signUp(InputTextField inputData) async {
+  static Future<ResponseStatus> signUp(FieldUser inputData) async {
     RegisterRequestModel model = RegisterRequestModel.fromInput(inputData);
     dynamic decodedJson =
         await MakeRequest.post("user/register", model.toMap());

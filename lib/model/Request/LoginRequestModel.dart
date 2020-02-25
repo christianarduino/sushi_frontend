@@ -1,4 +1,4 @@
-import 'package:sushi/utils/input_text_field.dart';
+import 'package:sushi/utils/field_user.dart';
 
 class LoginRequestModel {
   final String username;
@@ -6,7 +6,7 @@ class LoginRequestModel {
 
   LoginRequestModel(this.username, this.password);
 
-  LoginRequestModel.fromInput(InputTextField inputData)
+  LoginRequestModel.fromInput(FieldUser inputData)
       : this.username = inputData.username,
         this.password = inputData.password;
 

@@ -16,7 +16,7 @@ import 'package:sushi/screens/HomePage/home_page.dart';
 import 'package:sushi/screens/RegisterPage/register_page.dart';
 import 'package:sushi/utils/column_builder.dart';
 import 'package:sushi/utils/dialog_message.dart';
-import 'package:sushi/utils/input_text_field.dart';
+import 'package:sushi/utils/field_user.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -24,7 +24,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final InputTextField inputTextField = InputTextField();
+  final FieldUser inputTextField = FieldUser();
 
   @override
   Widget build(BuildContext context) {

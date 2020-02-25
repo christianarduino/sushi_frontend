@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:sushi/model/TextField/InputField.dart';
 import 'package:sushi/utils/functions.dart';
 
-class InputTextField {
+class FieldUser {
   String name;
   String surname;
   String username;
@@ -37,6 +37,16 @@ class InputTextField {
       isObscured: true,
       kType: TextInputType.visiblePassword,
     ),
+    InputField(
+      label: "Inserisci nome del gruppo",
+      kType: TextInputType.visiblePassword,
+      textCapitalization: TextCapitalization.sentences,
+    ),
+    InputField(
+      label: "Inserisci descrizione del gruppo",
+      kType: TextInputType.visiblePassword,
+      textCapitalization: TextCapitalization.sentences,
+    ),
   ];
 
   setData(String inputValue, String label) {
@@ -58,6 +68,12 @@ class InputTextField {
         break;
       case "Conferma password":
         this.confirmPassword = inputValue;
+        break;
+      case "Inserisci nome del gruppo":
+        this.groupName = inputValue;
+        break;
+      case "Inserisci descrizione del gruppo":
+        this.groupDescription = inputValue;
         break;
     }
   }

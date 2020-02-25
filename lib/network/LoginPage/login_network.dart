@@ -2,10 +2,10 @@ import 'package:sushi/api/make_request.dart';
 import 'package:sushi/model/Request/LoginRequestModel.dart';
 import 'package:sushi/model/Response/ResponseStatus.dart';
 import 'package:sushi/model/Store/User.dart';
-import 'package:sushi/utils/input_text_field.dart';
+import 'package:sushi/utils/field_user.dart';
 
 class LoginNetwork {
-  static Future<ResponseStatus> login(InputTextField inputData) async {
+  static Future<ResponseStatus> login(FieldUser inputData) async {
     try {
       LoginRequestModel model = LoginRequestModel.fromInput(inputData);
       dynamic decodedJson = await MakeRequest.post("user/login", model.toMap());

@@ -10,6 +10,7 @@ import 'package:sushi/model/Response/ResponseStatus.dart';
 import 'package:sushi/network/HomeRequest/home_request.dart';
 import 'package:sushi/redux/actions/UserActions/user_actions.dart';
 import 'package:sushi/redux/store/AppState.dart';
+import 'package:sushi/screens/CreateGroup/create_group_page.dart';
 import 'dart:math' as math show pi;
 
 import 'package:sushi/screens/LoginPage/login_page.dart';
@@ -256,7 +257,14 @@ class _HomePageState extends State<HomePage> {
                 labelStyle: TextStyle(
                   fontSize: ScreenUtil().setSp(16.0),
                 ),
-                onTap: () => print('Crea gruppo'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => CreateGroupPage(),
+                    ),
+                  );
+                },
               ),
               SpeedDialChild(
                 child: Icon(Icons.people),

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sushi/model/TextField/InputField.dart';
-import 'package:sushi/utils/input_text_field.dart';
+import 'package:sushi/utils/field_user.dart';
 
 class CustomTextField extends StatelessWidget {
   final EdgeInsets padding;
-  final InputTextField inputTextField;
+  final FieldUser inputTextField;
   final InputField inputField;
 
   CustomTextField({
@@ -39,7 +39,8 @@ class CustomTextField extends StatelessWidget {
           inputTextField.setData(text, inputField.label);
         },
         validator: (String text) {
-          if (text.isEmpty) return "Campo vuoto";
+          if (text.isEmpty && !inputField.label.contains("descrizione"))
+            return "Campo vuoto";
           return inputTextField.validate(inputField.label, text);
         },
       ),
