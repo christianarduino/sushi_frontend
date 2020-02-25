@@ -6,13 +6,17 @@ import 'package:sushi/utils/input_text_field.dart';
 
 class LoginNetwork {
   static Future<ResponseStatus> login(InputTextField inputData) async {
-    LoginRequestModel model = LoginRequestModel.fromInput(inputData);
-    dynamic decodedJson = await MakeRequest.post("user/login", model.toMap());
-    if (decodedJson['error']) {
-      return ResponseStatus(false, decodedJson['message']);
-    } else {
-      User user = User.fromJson(decodedJson['user']);
-      return ResponseStatus(true, user);
+    try {
+      LoginRequestModel model = LoginRequestModel.fromInput(inputData);
+      dynamic decodedJson = await MakeRequest.post("user/login", model.toMap());
+      if (decodedJson['error']) {
+        return ResponseStatus(false, decodedJson['message']);
+      } else {
+        User user = User.fromJson(decodedJson['user']);
+        return ResponseStatus(true, user);
+      }
+    } catch (e) {
+      return ResponseStatus(false, "Si è verificato un errore. Riprova");
     }
   }
 }

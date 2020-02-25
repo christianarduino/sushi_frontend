@@ -23,9 +23,20 @@ class InputTextField {
       textCapitalization: TextCapitalization.words,
     ),
     InputField(label: "Inserisci username"),
-    InputField(label: "Inserisci email"),
-    InputField(label: "Inserisci password", isObscured: true),
-    InputField(label: "Conferma password", isObscured: true),
+    InputField(
+      label: "Inserisci email",
+      kType: TextInputType.emailAddress,
+    ),
+    InputField(
+      label: "Inserisci password",
+      isObscured: true,
+      kType: TextInputType.visiblePassword,
+    ),
+    InputField(
+      label: "Conferma password",
+      isObscured: true,
+      kType: TextInputType.visiblePassword,
+    ),
   ];
 
   setData(String inputValue, String label) {

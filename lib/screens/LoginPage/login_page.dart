@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:redux/redux.dart';
@@ -11,8 +12,10 @@ import 'package:sushi/model/TextField/InputField.dart';
 import 'package:sushi/network/LoginPage/login_network.dart';
 import 'package:sushi/redux/actions/UserActions/user_actions.dart';
 import 'package:sushi/redux/store/AppState.dart';
+import 'package:sushi/screens/HomePage/home_page.dart';
 import 'package:sushi/screens/RegisterPage/register_page.dart';
 import 'package:sushi/utils/column_builder.dart';
+import 'package:sushi/utils/dialog_message.dart';
 import 'package:sushi/utils/input_text_field.dart';
 
 class LoginPage extends StatefulWidget {
@@ -25,46 +28,46 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Background(),
-          Align(
-            alignment: Alignment.center,
-            child: ListView(
-              padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(50),
-              ),
-              shrinkWrap: true,
-              children: <Widget>[
-                RichText(
-                  text: TextSpan(
-                    text: 'Il ',
-                    style: Theme.of(context).textTheme.body1.copyWith(
-                          fontSize: ScreenUtil().setSp(40),
+    return ProgressHUD(
+      child: Scaffold(
+        body: Stack(
+          children: <Widget>[
+            Background(),
+            Align(
+              alignment: Alignment.center,
+              child: ListView(
+                padding: EdgeInsets.symmetric(
+                  horizontal: ScreenUtil().setWidth(50),
+                ),
+                shrinkWrap: true,
+                children: <Widget>[
+                  RichText(
+                    text: TextSpan(
+                      text: 'Il ',
+                      style: Theme.of(context).textTheme.body1.copyWith(
+                            fontSize: ScreenUtil().setSp(40),
+                          ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: "sushi ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: "sushi ",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
+                        TextSpan(text: "aspetta\nsoltanto "),
+                        TextSpan(
+                          text: 'te 🍣',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
-                      TextSpan(text: "aspetta\nsoltanto "),
-                      TextSpan(
-                        text: 'te 🍣',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: ScreenUtil().setHeight(60),
-                ),
-                Form(
-                  child: Column(
+                  SizedBox(
+                    height: ScreenUtil().setHeight(60),
+                  ),
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
@@ -89,47 +92,60 @@ class _LoginPageState extends State<LoginPage> {
                         height: ScreenUtil().setHeight(65),
                       ),
                       StoreConnector<AppState, Store<AppState>>(
-                          converter: (store) => store,
-                          builder: (context, store) {
-                            return CustomButton(
-                              label: "Accedi",
-                              onTap: () async {
-                                ResponseStatus responseStatus =
-                                    await LoginNetwork.login(inputTextField);
-                                if (!responseStatus.success) {
-                                  //modal con il messaggio
-                                }
+                        converter: (store) => store,
+                        builder: (context, store) {
+                          return CustomButton(
+                            label: "Accedi",
+                            onTap: () async {
+                              final progress = ProgressHUD.of(context);
+                              progress.show();
+                              ResponseStatus status = await LoginNetwork.login(
+                                inputTextField,
+                              );
+                              progress.dismiss();
+                              if (!status.success) {
+                                return DialogMessage.errorWithMessage(
+                                  context,
+                                  status.data,
+                                );
+                              }
 
-                                store.dispatch(SaveUser(responseStatus.data));
-                                print(store.state.user.name);
-                              },
-                            );
-                          })
+                              store.dispatch(SaveUser(status.data));
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => HomePage(),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      )
                     ],
                   ),
-                ),
-                SizedBox(
-                  height: ScreenUtil().setHeight(40),
-                ),
-                CustomOutlineButton(
-                  label: "Registrati",
-                  borderColor: Theme.of(context).accentColor,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => RegisterPage(),
-                      ),
-                    );
-                  },
-                ),
-                SizedBox(
-                  height: ScreenUtil().setHeight(15),
-                ),
-              ],
+                  SizedBox(
+                    height: ScreenUtil().setHeight(40),
+                  ),
+                  CustomOutlineButton(
+                    label: "Registrati",
+                    borderColor: Theme.of(context).accentColor,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => RegisterPage(),
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(
+                    height: ScreenUtil().setHeight(15),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

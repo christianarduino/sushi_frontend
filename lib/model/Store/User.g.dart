@@ -14,11 +14,10 @@ User _$UserFromJson(Map<String, dynamic> json) {
     json['username'] as String,
     json['email'] as String,
     json['password'] as String,
-    (json['groups'] as List)
-        ?.map((e) =>
-            e == null ? null : UserGroup.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
-  );
+  )..groups = (json['groups'] as List)
+      ?.map(
+          (e) => e == null ? null : Groups.fromJson(e as Map<String, dynamic>))
+      ?.toList();
 }
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
@@ -29,16 +28,4 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'email': instance.email,
       'password': instance.password,
       'groups': instance.groups,
-    };
-
-UserGroup _$UserGroupFromJson(Map<String, dynamic> json) {
-  return UserGroup(
-    json['isAdmin'] as bool,
-    json['groupId'] as String,
-  );
-}
-
-Map<String, dynamic> _$UserGroupToJson(UserGroup instance) => <String, dynamic>{
-      'isAdmin': instance.isAdmin,
-      'groupId': instance.groupId,
     };
