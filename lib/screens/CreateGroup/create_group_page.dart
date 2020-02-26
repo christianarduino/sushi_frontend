@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:redux/redux.dart';
+import 'package:sushi/components/custom_button.dart';
 import 'package:sushi/components/custom_text_field.dart';
+import 'package:sushi/components/icon_with_label.dart';
 import 'package:sushi/model/TextField/InputField.dart';
+import 'package:sushi/redux/actions/NewGroupActions/new_group_actions.dart';
+import 'package:sushi/redux/store/AppState.dart';
+import 'package:sushi/screens/AddMemberPage/add_member_page.dart';
 import 'package:sushi/utils/column_builder.dart';
 import 'package:sushi/utils/field_user.dart';
+import 'package:sushi/utils/popup.dart';
+
+enum PaymentType { Romana, Equo }
 
 class CreateGroupPage extends StatefulWidget {
   @override
@@ -12,6 +22,7 @@ class CreateGroupPage extends StatefulWidget {
 
 class _CreateGroupPageState extends State<CreateGroupPage> {
   FieldUser fieldUser = FieldUser();
+  PaymentType dropdownValue;
 
   @override
   Widget build(BuildContext context) {
@@ -29,57 +40,114 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
           ),
         ),
       ),
-      body: ListView(
-        padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(50),
-        ),
-        children: <Widget>[
-          SizedBox(
-            height: ScreenUtil().setHeight(20),
-          ),
-          ColumnBuilder(
-            itemCount: fieldUser.inputs.length,
-            itemBuilder: (_, int i) {
-              InputField field = fieldUser.inputs[i];
-              if (field.label.contains("gruppo")) {
-                return CustomTextField(
-                  inputField: field,
-                  inputTextField: fieldUser,
-                );
-              }
-              return SizedBox.shrink();
-            },
-          ),
-          SizedBox(
-            height: ScreenUtil().setHeight(20),
-          ),
-          InkWell(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+      body: StoreConnector<AppState, Store<AppState>>(
+          converter: (store) => store,
+          builder: (context, store) {
+            return ListView(
+              padding: EdgeInsets.symmetric(
+                horizontal: ScreenUtil().setWidth(50),
+              ),
               children: <Widget>[
-                Icon(
-                  Icons.add_circle_outline,
-                  size: ScreenUtil().setWidth(25),
-                  color: Theme.of(context).accentColor,
+                SizedBox(
+                  height: ScreenUtil().setHeight(20),
+                ),
+                ColumnBuilder(
+                  itemCount: fieldUser.inputs.length,
+                  itemBuilder: (_, int i) {
+                    InputField field = fieldUser.inputs[i];
+                    if (field.label.contains("gruppo")) {
+                      return CustomTextField(
+                        inputField: field,
+                        inputTextField: fieldUser,
+                      );
+                    }
+                    return SizedBox.shrink();
+                  },
                 ),
                 SizedBox(
-                  width: ScreenUtil().setWidth(30),
+                  height: ScreenUtil().setHeight(20),
                 ),
-                Text(
-                  "Aggiungi membri",
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(17),
-                    color: Theme.of(context).accentColor,
-                  ),
+                Builder(
+                  builder: (context) {
+                    int numMember = store.state.newGroup.users.length;
+                    bool isEmpty = numMember == 0;
+                    return IconWithLabel(
+                      label: isEmpty
+                          ? "Aggiungi membri"
+                          : "$numMember membri aggiunti",
+                      icon: Icons.add_circle_outline,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => AddMemberPage(),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+                SizedBox(
+                  height: ScreenUtil().setHeight(35),
+                ),
+                IconWithLabel(
+                  label: "Scegli il locale",
+                  icon: Icons.restaurant,
+                  onTap: () {},
+                ),
+                SizedBox(
+                  height: ScreenUtil().setHeight(40),
+                ),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: InkWell(
+                        child: Icon(
+                          Icons.info_outline,
+                          color: Theme.of(context).accentColor,
+                        ),
+                        onTap: () => Popup.info(context),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 5,
+                      child: DropdownButton(
+                        isExpanded: true,
+                        value: dropdownValue,
+                        hint: Text("Metodo di pagamento"),
+                        onChanged: (type) {
+                          PaymentType paymentType = type as PaymentType;
+                          setState(() {
+                            dropdownValue = paymentType;
+                          });
+                          store.dispatch(SelectPayment(paymentType));
+                        },
+                        items: [
+                          DropdownMenuItem(
+                            child: Text("Romana"),
+                            value: PaymentType.Romana,
+                          ),
+                          DropdownMenuItem(
+                            child: Text("Equo"),
+                            value: PaymentType.Equo,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: ScreenUtil().setHeight(40),
+                ),
+                CustomButton(
+                  label: "Crea",
+                  onTap: () {
+                    store.dispatch(SelectNameAndDesc(fieldUser));
+                  },
                 ),
               ],
-            ),
-            onTap: () {
-              print("Add members pressed");
-            },
-          ),
-        ],
-      ),
+            );
+          }),
     );
   }
 }

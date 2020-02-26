@@ -11,7 +11,7 @@ AppState userReducer(AppState state, dynamic action) {
       return state;
     case UserActions.SaveUserGroup:
       Groups groups = action.payload as Groups;
-      state.user.groups = groups;
+      state.user.setGroup(groups);
       return state;
     case UserActions.ResetData:
       state = AppState();

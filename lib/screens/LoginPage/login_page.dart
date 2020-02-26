@@ -15,7 +15,7 @@ import 'package:sushi/redux/store/AppState.dart';
 import 'package:sushi/screens/HomePage/home_page.dart';
 import 'package:sushi/screens/RegisterPage/register_page.dart';
 import 'package:sushi/utils/column_builder.dart';
-import 'package:sushi/utils/dialog_message.dart';
+import 'package:sushi/utils/popup.dart';
 import 'package:sushi/utils/field_user.dart';
 
 class LoginPage extends StatefulWidget {
@@ -104,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                               );
                               progress.dismiss();
                               if (!status.success) {
-                                return DialogMessage.errorWithMessage(
+                                return Popup.errorWithMessage(
                                   context,
                                   status.data,
                                 );

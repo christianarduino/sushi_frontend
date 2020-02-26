@@ -10,7 +10,9 @@ class MakeRequest {
 
   static Future get(String endpoint) async {
     try {
+      print(url + endpoint);
       http.Response response = await http.get(url + endpoint);
+      print(response.body);
       final responseJson = await jsonDecode(response.body);
       return responseJson;
     } on SocketException {

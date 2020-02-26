@@ -13,7 +13,7 @@ import 'package:sushi/redux/actions/UserActions/user_actions.dart';
 import 'package:sushi/redux/store/AppState.dart';
 import 'package:sushi/screens/HomePage/home_page.dart';
 import 'package:sushi/utils/column_builder.dart';
-import 'package:sushi/utils/dialog_message.dart';
+import 'package:sushi/utils/popup.dart';
 import 'package:sushi/utils/field_user.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -89,7 +89,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   );
                                   progress.dismiss();
                                   if (!status.success) {
-                                    return DialogMessage.errorWithMessage(
+                                    return Popup.errorWithMessage(
                                       context,
                                       status.data,
                                     );
