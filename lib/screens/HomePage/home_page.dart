@@ -104,10 +104,11 @@ class _HomePageState extends State<HomePage> {
                   width: ScreenUtil().setWidth(20),
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ProfilePage(),
-                        ));
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ProfilePage(),
+                      ),
+                    );
                   },
                 ),
               ),
@@ -134,6 +135,17 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 );
+
+              if (groups.member.isEmpty && groups.admin.isEmpty) {
+                return Center(
+                  child: Center(
+                    child: Text(
+                      "Non fai parte di nessun gruppo\n\nPremi il pulsante in basso per partecipare\nad un gruppo o per crearne uno tuo",
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                );
+              }
 
               return SafeArea(
                 child: SmartRefresher(
