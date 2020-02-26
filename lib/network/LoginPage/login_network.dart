@@ -16,6 +16,7 @@ class LoginNetwork {
         return ResponseStatus(true, user);
       }
     } catch (e) {
+      print(e);
       return ResponseStatus(false, "Si è verificato un errore. Riprova");
     }
   }

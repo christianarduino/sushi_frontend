@@ -7,7 +7,8 @@ enum NewGroupActions {
   AddMember,
   RemoveMember,
   SelectLocal,
-  SelectPayment
+  SelectPayment,
+  RemoveGroup,
 }
 
 class SelectNameAndDesc {
@@ -43,4 +44,8 @@ class SelectPayment {
   final NewGroupActions type = NewGroupActions.SelectPayment;
 
   SelectPayment(this.payload);
+}
+
+class RemoveGroup {
+  final NewGroupActions type = NewGroupActions.RemoveGroup;
 }

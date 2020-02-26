@@ -21,6 +21,7 @@ class CreateGroupPage extends StatefulWidget {
 }
 
 class _CreateGroupPageState extends State<CreateGroupPage> {
+  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   FieldUser fieldUser = FieldUser();
   PaymentType dropdownValue;
 
@@ -40,8 +41,11 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
           ),
         ),
       ),
-      body: StoreConnector<AppState, Store<AppState>>(
+      body: Form(
+        key: _formKey,
+        child: StoreConnector<AppState, Store<AppState>>(
           converter: (store) => store,
+          onDispose: (store) => store.dispatch(RemoveGroup()),
           builder: (context, store) {
             return ListView(
               padding: EdgeInsets.symmetric(
@@ -142,12 +146,16 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                 CustomButton(
                   label: "Crea",
                   onTap: () {
-                    store.dispatch(SelectNameAndDesc(fieldUser));
+                    if (_formKey.currentState.validate()) {
+                      store.dispatch(SelectNameAndDesc(fieldUser));
+                    }
                   },
                 ),
               ],
             );
-          }),
+          },
+        ),
+      ),
     );
   }
 }

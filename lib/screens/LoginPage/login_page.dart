@@ -24,6 +24,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FieldUser inputTextField = FieldUser();
 
   @override
@@ -67,61 +68,68 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(
                     height: ScreenUtil().setHeight(60),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ColumnBuilder(
-                        itemCount: inputTextField.inputs.length,
-                        itemBuilder: (_, int i) {
-                          InputField input = inputTextField.inputs[i];
-                          bool isUsername = input.label.contains("username");
-                          bool isPassword = input.label == "Inserisci password";
-                          if (isUsername || isPassword) {
-                            return CustomTextField(
-                              inputField: input,
-                              padding: isPassword ? EdgeInsets.zero : null,
-                              inputTextField: inputTextField,
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ColumnBuilder(
+                          itemCount: inputTextField.inputs.length,
+                          itemBuilder: (_, int i) {
+                            InputField input = inputTextField.inputs[i];
+                            bool isUsername = input.label.contains("username");
+                            bool isPassword =
+                                input.label == "Inserisci password";
+                            if (isUsername || isPassword) {
+                              return CustomTextField(
+                                inputField: input,
+                                padding: isPassword ? EdgeInsets.zero : null,
+                                inputTextField: inputTextField,
+                              );
+                            }
+
+                            return SizedBox.shrink();
+                          },
+                        ),
+                        SizedBox(
+                          height: ScreenUtil().setHeight(65),
+                        ),
+                        StoreConnector<AppState, Store<AppState>>(
+                          converter: (store) => store,
+                          builder: (context, store) {
+                            return CustomButton(
+                              label: "Accedi",
+                              onTap: () async {
+                                if (_formKey.currentState.validate()) {
+                                  final progress = ProgressHUD.of(context);
+                                  progress.show();
+                                  ResponseStatus status =
+                                      await LoginNetwork.login(
+                                    inputTextField,
+                                  );
+                                  progress.dismiss();
+                                  if (!status.success) {
+                                    return Popup.errorWithMessage(
+                                      context,
+                                      status.data,
+                                    );
+                                  }
+
+                                  store.dispatch(SaveUser(status.data));
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => HomePage(),
+                                    ),
+                                  );
+                                }
+                              },
                             );
-                          }
-
-                          return SizedBox.shrink();
-                        },
-                      ),
-                      SizedBox(
-                        height: ScreenUtil().setHeight(65),
-                      ),
-                      StoreConnector<AppState, Store<AppState>>(
-                        converter: (store) => store,
-                        builder: (context, store) {
-                          return CustomButton(
-                            label: "Accedi",
-                            onTap: () async {
-                              final progress = ProgressHUD.of(context);
-                              progress.show();
-                              ResponseStatus status = await LoginNetwork.login(
-                                inputTextField,
-                              );
-                              progress.dismiss();
-                              if (!status.success) {
-                                return Popup.errorWithMessage(
-                                  context,
-                                  status.data,
-                                );
-                              }
-
-                              store.dispatch(SaveUser(status.data));
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => HomePage(),
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      )
-                    ],
+                          },
+                        )
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: ScreenUtil().setHeight(40),
