@@ -71,10 +71,10 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                   builder: (context) {
                     int numMember = store.state.newGroup.users.length;
                     bool isEmpty = numMember == 0;
+                    String concat =
+                        numMember == 1 ? "membro aggiunto" : "membri aggiunti";
                     return IconWithLabel(
-                      label: isEmpty
-                          ? "Aggiungi membri"
-                          : "$numMember membri aggiunti",
+                      label: isEmpty ? "Aggiungi membri" : "$numMember $concat",
                       icon: Icons.add_circle_outline,
                       onTap: () {
                         Navigator.push(

@@ -14,6 +14,7 @@ import 'package:sushi/screens/CreateGroup/create_group_page.dart';
 import 'dart:math' as math show pi;
 
 import 'package:sushi/screens/LoginPage/login_page.dart';
+import 'package:sushi/screens/ProfilePage/profile_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -101,7 +102,13 @@ class _HomePageState extends State<HomePage> {
                 ),
                 child: Avatar(
                   width: ScreenUtil().setWidth(20),
-                  onTap: () => print("avatar"),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ProfilePage(),
+                        ));
+                  },
                 ),
               ),
             ],
