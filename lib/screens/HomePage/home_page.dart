@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:redux/redux.dart';
 import 'package:sushi/components/avatar.dart';
@@ -15,6 +16,7 @@ import 'dart:math' as math show pi;
 
 import 'package:sushi/screens/LoginPage/login_page.dart';
 import 'package:sushi/screens/ProfilePage/profile_page.dart';
+import 'package:sushi/utils/functions.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -26,6 +28,12 @@ class _HomePageState extends State<HomePage> {
   Groups groups;
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+
+  @override
+  void initState() {
+    super.initState();
+    initStatusBar();
+  }
 
   @override
   void dispose() {

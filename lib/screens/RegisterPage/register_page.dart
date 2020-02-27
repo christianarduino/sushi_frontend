@@ -40,7 +40,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           elevation: 5,
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).canvasColor,
         ),
         body: SafeArea(
           child: Stack(

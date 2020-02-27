@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:sushi/redux/reducers/index.dart';
 import 'package:sushi/redux/store/AppState.dart';
 import 'package:sushi/screens/LoginPage/login_page.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:sushi/utils/functions.dart';
 
 void main() async {
   final Store<AppState> store = Store(
@@ -18,15 +20,26 @@ void main() async {
   runApp(SushiApp(store: store));
 }
 
-class SushiApp extends StatelessWidget {
+class SushiApp extends StatefulWidget {
   final Store<AppState> store;
 
   SushiApp({this.store});
 
   @override
+  _SushiAppState createState() => _SushiAppState();
+}
+
+class _SushiAppState extends State<SushiApp> {
+  @override
+  void initState() {
+    super.initState();
+    initStatusBar();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return StoreProvider(
-      store: store,
+      store: widget.store,
       child: MaterialApp(
         theme: ThemeData(
           fontFamily: 'Poppins',
