@@ -5,7 +5,10 @@ import 'package:redux/redux.dart';
 import 'package:sushi/components/custom_button.dart';
 import 'package:sushi/components/custom_text_field.dart';
 import 'package:sushi/components/icon_with_label.dart';
+import 'package:sushi/model/Response/ResponseStatus.dart';
+import 'package:sushi/model/Store/NewGroup.dart';
 import 'package:sushi/model/TextField/InputField.dart';
+import 'package:sushi/network/CreateGroupNetwork/create_network_group.dart';
 import 'package:sushi/redux/actions/NewGroupActions/new_group_actions.dart';
 import 'package:sushi/redux/store/AppState.dart';
 import 'package:sushi/screens/AddMemberPage/add_member_page.dart';
@@ -145,9 +148,16 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                 ),
                 CustomButton(
                   label: "Crea",
-                  onTap: () {
+                  onTap: () async {
                     if (_formKey.currentState.validate()) {
                       store.dispatch(SelectNameAndDesc(fieldUser));
+                      String userId = store.state.user.id;
+                      NewGroup group = store.state.newGroup;
+                      ResponseStatus status =
+                          await CreateGroupNetwork.createGroup(group, userId);
+
+                      if (!status.success)
+                        await Popup.errorWithMessage(context, status.data);
                     }
                   },
                 ),

@@ -2,6 +2,23 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 
 class Popup {
+  static success(BuildContext context, String desc) async {
+    await AwesomeDialog(
+      context: context,
+      dialogType: DialogType.SUCCES,
+      animType: AnimType.SCALE,
+      headerAnimationLoop: false,
+      btnOk: FlatButton(
+        child: Text("Ok"),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+      tittle: "Successo",
+      desc: desc,
+    ).show();
+  }
+
   static errorWithMessage(BuildContext context, String desc) async {
     await AwesomeDialog(
       context: context,

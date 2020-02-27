@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:sushi/utils/field_user.dart';
 
 class LoginRequestModel {
@@ -10,10 +12,10 @@ class LoginRequestModel {
       : this.username = inputData.username,
         this.password = inputData.password;
 
-  Map<String, String> toMap() {
-    return {
+  String toJson() {
+    return jsonEncode({
       "username": username,
       "password": password,
-    };
+    });
   }
 }

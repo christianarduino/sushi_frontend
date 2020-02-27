@@ -8,7 +8,7 @@ class RegisterNetwork {
   static Future<ResponseStatus> signUp(FieldUser inputData) async {
     RegisterRequestModel model = RegisterRequestModel.fromInput(inputData);
     dynamic decodedJson =
-        await MakeRequest.post("user/register", model.toMap());
+        await MakeRequest.post("user/register", model.toJson());
     if (decodedJson['error']) {
       return ResponseStatus(false, decodedJson['message']);
     } else {

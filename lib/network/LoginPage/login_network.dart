@@ -8,7 +8,8 @@ class LoginNetwork {
   static Future<ResponseStatus> login(FieldUser inputData) async {
     try {
       LoginRequestModel model = LoginRequestModel.fromInput(inputData);
-      dynamic decodedJson = await MakeRequest.post("user/login", model.toMap());
+      dynamic decodedJson =
+          await MakeRequest.post("user/login", model.toJson());
       if (decodedJson['error']) {
         return ResponseStatus(false, decodedJson['message']);
       } else {

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:sushi/utils/field_user.dart';
 
 class RegisterRequestModel {
@@ -17,13 +19,13 @@ class RegisterRequestModel {
         email = inputData.email,
         password = inputData.password;
 
-  Map<String, String> toMap() {
-    return {
+  String toJson() {
+    return jsonEncode({
       "name": name,
       "surname": surname,
       "username": username,
       "email": email,
       "password": password,
-    };
+    });
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:sushi/model/Store/User.dart';
 import 'package:sushi/screens/CreateGroup/create_group_page.dart';
 import 'package:sushi/utils/field_user.dart';
@@ -5,6 +7,7 @@ import 'package:sushi/utils/field_user.dart';
 class NewGroup {
   String name, description;
   List<User> users = [];
+  List<String> userIds = [];
   String localId;
   PaymentType paymentType;
 
@@ -15,6 +18,7 @@ class NewGroup {
 
   set addMember(User newUser) {
     users = [...users, newUser];
+    userIds = [...userIds, newUser.id];
   }
 
   set local(String id) {
@@ -37,5 +41,17 @@ class NewGroup {
     } catch (e) {
       return false;
     }
+  }
+
+  String toJson() {
+    Map<String, dynamic> body = {
+      "name": name,
+      "userIds": userIds,
+    };
+    print("Description: $description");
+    if (description != null && description != "")
+      body['description'] = description;
+
+    return jsonEncode(body);
   }
 }

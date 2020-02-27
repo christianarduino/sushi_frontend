@@ -33,11 +33,14 @@ class MakeRequest {
     }
   }
 
-  static Future post(String endpoint, Map<String, String> body) async {
+  static Future post(String endpoint, String body) async {
     try {
       print(url + endpoint);
       print(body);
-      http.Response response = await http.post(url + endpoint, body: body);
+      http.Response response =
+          await http.post(url + endpoint, body: body, headers: {
+        "Content-Type": "application/json",
+      });
       print(response.body);
       final responseJson = await jsonDecode(response.body);
       return responseJson;
