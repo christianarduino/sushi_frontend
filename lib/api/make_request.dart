@@ -41,7 +41,6 @@ class MakeRequest {
           await http.post(url + endpoint, body: body, headers: {
         "Content-Type": "application/json",
       });
-      print(response.body);
       final responseJson = await jsonDecode(response.body);
       return responseJson;
     } on SocketException {

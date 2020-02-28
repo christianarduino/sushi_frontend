@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:sushi/components/custom_app_bar.dart';
 import 'package:sushi/components/search_appbar.dart';
 import 'package:sushi/model/Response/ResponseStatus.dart';
 import 'package:sushi/model/Store/NewGroup.dart';
@@ -19,6 +20,8 @@ class AddMemberPage extends StatefulWidget {
 class _AddMemberPageState extends State<AddMemberPage> {
   String userId;
   NewGroup group;
+  Timer _debounce;
+  TextEditingController controller = TextEditingController();
   Future<ResponseStatus> _usersList;
 
   @override
@@ -29,13 +32,30 @@ class _AddMemberPageState extends State<AddMemberPage> {
         final String userId = store.state.user.id;
         final NewGroup newGroup = store.state.newGroup;
         return Scaffold(
-          appBar: SearchAppBar(
-            onSearch: (String term) {
-              setState(() {
-                _usersList = AddMemberNetwork.getUsers(userId, term);
+          appBar: CustomAppBar(
+              title: TextField(
+            controller: controller,
+            autofocus: true,
+            cursorColor: Theme.of(context).primaryColor,
+            decoration: InputDecoration(
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Theme.of(context).primaryColor,
+                  width: 1.0,
+                ),
+              ),
+            ),
+            onChanged: (String text) {
+              if (_debounce?.isActive ?? false) _debounce.cancel();
+              _debounce = Timer(Duration(milliseconds: 600), () async {
+                if (text.length > 2) {
+                  setState(() {
+                    _usersList = AddMemberNetwork.searchUser(userId, text);
+                  });
+                }
               });
             },
-          ),
+          )),
           body: FutureBuilder(
             future: _usersList,
             builder: (_, AsyncSnapshot<ResponseStatus> snapshot) {

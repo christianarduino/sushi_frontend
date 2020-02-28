@@ -157,7 +157,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                           await CreateGroupNetwork.createGroup(group, userId);
 
                       if (!status.success)
-                        await Popup.errorWithMessage(context, status.data);
+                        await Popup.error(context, status.data);
                     }
                   },
                 ),

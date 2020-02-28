@@ -110,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                                   );
                                   progress.dismiss();
                                   if (!status.success) {
-                                    return Popup.errorWithMessage(
+                                    return Popup.error(
                                       context,
                                       status.data,
                                     );

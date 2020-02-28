@@ -22,30 +22,30 @@ class SearchApi extends StatefulWidget {
 }
 
 class _SearchApiState extends State<SearchApi> {
-  final _searchQuery = new TextEditingController();
+  TextEditingController _searchQuery;
   Timer _debounce;
+  String value;
 
   @override
   void initState() {
     super.initState();
-    _searchQuery.addListener(_onSearchChanged);
+    print("ciao");
+    _searchQuery = TextEditingController();
   }
 
   @override
   void dispose() {
-    _debounce.cancel();
-    _searchQuery.removeListener(_onSearchChanged);
-    _searchQuery.dispose();
+    if (_debounce != null) _debounce.cancel();
+    print("dispose");
     super.dispose();
   }
 
   //delay on search
-  _onSearchChanged() async {
+  _onSearchChanged(String text) async {
     if (_debounce?.isActive ?? false) _debounce.cancel();
     _debounce = Timer(Duration(milliseconds: widget.debounceTime), () {
-      if (_searchQuery.text.length > 2) {
-        return widget.onSearch(_searchQuery.text);
-//
+      if (text.length > 2) {
+        widget.onSearch(text);
       }
     });
   }
@@ -57,6 +57,14 @@ class _SearchApiState extends State<SearchApi> {
       cursorColor: Theme.of(context).primaryColor,
       decoration: widget.decoration,
       controller: _searchQuery,
+      onChanged: (String text) {
+        if (_debounce?.isActive ?? false) _debounce.cancel();
+        _debounce = Timer(Duration(milliseconds: widget.debounceTime), () {
+          if (text.length > 2) {
+            widget.onSearch(text);
+          }
+        });
+      },
     );
   }
 }

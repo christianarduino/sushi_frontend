@@ -89,7 +89,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   );
                                   progress.dismiss();
                                   if (!status.success) {
-                                    return Popup.errorWithMessage(
+                                    return Popup.error(
                                       context,
                                       status.data,
                                     );

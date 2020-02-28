@@ -42,6 +42,9 @@ class _SushiAppState extends State<SushiApp> {
       store: widget.store,
       child: MaterialApp(
         theme: ThemeData(
+          bottomSheetTheme: BottomSheetThemeData(
+            backgroundColor: Colors.black.withOpacity(0),
+          ),
           fontFamily: 'Poppins',
           inputDecorationTheme: InputDecorationTheme(
             focusedBorder: UnderlineInputBorder(

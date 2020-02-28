@@ -10,6 +10,7 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      key: UniqueKey(),
       iconTheme: IconThemeData(
         color: Theme.of(context).primaryColor,
       ),

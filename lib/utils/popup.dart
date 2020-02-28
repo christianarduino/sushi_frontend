@@ -19,7 +19,7 @@ class Popup {
     ).show();
   }
 
-  static errorWithMessage(BuildContext context, String desc) async {
+  static error(BuildContext context, String desc) async {
     await AwesomeDialog(
       context: context,
       dialogType: DialogType.ERROR,
@@ -55,6 +55,27 @@ class Popup {
       Equo: ognuno paga la sua quota, quindi chi ordina prodotti al di fuori del menù all you can eat, dovrà pagarli singolarmente
       """
           .trim(),
+    ).show();
+  }
+
+  static confirm(BuildContext context, String desc, {Function onOk}) async {
+    await AwesomeDialog(
+      context: context,
+      dialogType: DialogType.WARNING,
+      animType: AnimType.SCALE,
+      headerAnimationLoop: false,
+      btnOk: FlatButton(
+        child: Text("Conferma"),
+        onPressed: onOk,
+      ),
+      btnCancel: FlatButton(
+        child: Text("Annulla"),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+      tittle: "Attenzione",
+      desc: desc,
     ).show();
   }
 }
