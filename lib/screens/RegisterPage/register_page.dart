@@ -6,6 +6,7 @@ import 'package:redux/redux.dart';
 import 'package:sushi/components/background.dart';
 import 'package:sushi/components/custom_button.dart';
 import 'package:sushi/components/custom_text_field.dart';
+import 'package:sushi/components/separator_height.dart';
 import 'package:sushi/model/Response/ResponseStatus.dart';
 import 'package:sushi/model/TextField/InputField.dart';
 import 'package:sushi/network/RegisterPage/register_network.dart';
@@ -13,6 +14,7 @@ import 'package:sushi/redux/actions/UserActions/user_actions.dart';
 import 'package:sushi/redux/store/AppState.dart';
 import 'package:sushi/screens/HomePage/home_page.dart';
 import 'package:sushi/utils/column_builder.dart';
+import 'package:sushi/utils/functions.dart';
 import 'package:sushi/utils/popup.dart';
 import 'package:sushi/utils/field_user.dart';
 
@@ -30,23 +32,16 @@ class _RegisterPageState extends State<RegisterPage> {
     return ProgressHUD(
       child: Scaffold(
         appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: Theme.of(context).primaryColor,
-          ),
           title: Text(
             "Sign Up",
-            style: TextStyle(
-              color: Theme.of(context).primaryColor,
-            ),
+            style: getStyle(context, Style.appBarTitle),
           ),
-          elevation: 5,
-          backgroundColor: Theme.of(context).canvasColor,
         ),
         body: SafeArea(
           child: Stack(
             children: <Widget>[
               Background(),
-              Container(
+              Align(
                 alignment: Alignment.center,
                 child: Form(
                   key: _formKey,
@@ -71,9 +66,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           return SizedBox.shrink();
                         },
                       ),
-                      SizedBox(
-                        height: ScreenUtil().setHeight(55),
-                      ),
+                      SeparatorHeight(55),
                       StoreConnector<AppState, Store<AppState>>(
                           converter: (store) => store,
                           builder: (context, store) {
@@ -106,9 +99,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               },
                             );
                           }),
-                      SizedBox(
-                        height: ScreenUtil().setHeight(10),
-                      ),
+                      SeparatorHeight(10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[

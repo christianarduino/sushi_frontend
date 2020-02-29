@@ -1,5 +1,5 @@
 import 'package:sushi/model/Store/User.dart';
-import 'package:sushi/screens/CreateGroup/create_group_page.dart';
+import 'package:sushi/utils/enum.dart';
 import 'package:sushi/utils/field_user.dart';
 
 enum NewGroupActions {

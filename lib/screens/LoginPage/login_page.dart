@@ -7,6 +7,7 @@ import 'package:sushi/components/background.dart';
 import 'package:sushi/components/custom_button.dart';
 import 'package:sushi/components/custom_outline_button.dart';
 import 'package:sushi/components/custom_text_field.dart';
+import 'package:sushi/components/separator_height.dart';
 import 'package:sushi/model/Response/ResponseStatus.dart';
 import 'package:sushi/model/TextField/InputField.dart';
 import 'package:sushi/network/LoginPage/login_network.dart';
@@ -65,9 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: ScreenUtil().setHeight(60),
-                  ),
+                  SeparatorHeight(60),
                   Form(
                     key: _formKey,
                     child: Column(
@@ -92,9 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                             return SizedBox.shrink();
                           },
                         ),
-                        SizedBox(
-                          height: ScreenUtil().setHeight(65),
-                        ),
+                        SeparatorHeight(65),
                         StoreConnector<AppState, Store<AppState>>(
                           converter: (store) => store,
                           builder: (context, store) {
@@ -131,9 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: ScreenUtil().setHeight(40),
-                  ),
+                  SeparatorHeight(40),
                   CustomOutlineButton(
                     label: "Registrati",
                     borderColor: Theme.of(context).accentColor,
@@ -146,9 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                       );
                     },
                   ),
-                  SizedBox(
-                    height: ScreenUtil().setHeight(15),
-                  ),
+                  SeparatorHeight(15),
                 ],
               ),
             ),

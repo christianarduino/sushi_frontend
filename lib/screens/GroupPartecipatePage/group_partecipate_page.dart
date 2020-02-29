@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-import 'package:sushi/components/custom_app_bar.dart';
 import 'package:sushi/model/Response/ResponseStatus.dart';
 import 'package:sushi/model/Response/SearchGroup.dart';
 import 'package:sushi/network/GroupPartecipateNetwork/group_partecipate_network.dart';
 import 'package:sushi/redux/store/AppState.dart';
 import 'package:sushi/screens/ConfirmGroupPage/confirm_group_page.dart';
+import 'package:sushi/utils/functions.dart';
 
 class GroupPartecipatePage extends StatefulWidget {
   @override
@@ -36,19 +36,12 @@ class _GroupPartecipatePageState extends State<GroupPartecipatePage> {
       converter: (store) => store,
       builder: (context, store) {
         return Scaffold(
-          appBar: CustomAppBar(
+          appBar: AppBar(
               title: TextField(
             controller: controller,
             autofocus: true,
             cursorColor: Theme.of(context).primaryColor,
-            decoration: InputDecoration(
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: Theme.of(context).primaryColor,
-                  width: 1.0,
-                ),
-              ),
-            ),
+            decoration: getStyle(context, Style.searchTextField),
             onChanged: (String text) {
               if (_debounce?.isActive ?? false) _debounce.cancel();
               _debounce = Timer(Duration(milliseconds: 600), () async {

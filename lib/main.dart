@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:sushi/redux/reducers/index.dart';
@@ -42,8 +41,14 @@ class _SushiAppState extends State<SushiApp> {
       store: widget.store,
       child: MaterialApp(
         theme: ThemeData(
-          bottomSheetTheme: BottomSheetThemeData(
-            backgroundColor: Colors.black.withOpacity(0),
+          canvasColor: Color(0xfffafafa),
+          appBarTheme: AppBarTheme(
+            elevation: 0,
+            color: Color(0xfffafafa),
+            iconTheme: IconThemeData(
+              color: Color(0xFF433C3F),
+            ),
+            brightness: Brightness.dark,
           ),
           fontFamily: 'Poppins',
           inputDecorationTheme: InputDecorationTheme(

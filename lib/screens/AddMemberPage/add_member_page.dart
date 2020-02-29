@@ -3,14 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-import 'package:sushi/components/custom_app_bar.dart';
-import 'package:sushi/components/search_appbar.dart';
 import 'package:sushi/model/Response/ResponseStatus.dart';
 import 'package:sushi/model/Store/NewGroup.dart';
 import 'package:sushi/model/Store/User.dart';
 import 'package:sushi/network/AddMemberNetwork/add_member_network.dart';
 import 'package:sushi/redux/actions/NewGroupActions/new_group_actions.dart';
 import 'package:sushi/redux/store/AppState.dart';
+import 'package:sushi/utils/functions.dart';
 
 class AddMemberPage extends StatefulWidget {
   @override
@@ -32,19 +31,12 @@ class _AddMemberPageState extends State<AddMemberPage> {
         final String userId = store.state.user.id;
         final NewGroup newGroup = store.state.newGroup;
         return Scaffold(
-          appBar: CustomAppBar(
+          appBar: AppBar(
               title: TextField(
             controller: controller,
             autofocus: true,
             cursorColor: Theme.of(context).primaryColor,
-            decoration: InputDecoration(
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: Theme.of(context).primaryColor,
-                  width: 1.0,
-                ),
-              ),
-            ),
+            decoration: getStyle(context, Style.searchTextField),
             onChanged: (String text) {
               if (_debounce?.isActive ?? false) _debounce.cancel();
               _debounce = Timer(Duration(milliseconds: 600), () async {

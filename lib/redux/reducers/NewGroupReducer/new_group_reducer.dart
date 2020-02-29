@@ -2,7 +2,6 @@ import 'package:sushi/model/Store/NewGroup.dart';
 import 'package:sushi/model/Store/User.dart';
 import 'package:sushi/redux/actions/NewGroupActions/new_group_actions.dart';
 import 'package:sushi/redux/store/AppState.dart';
-import 'package:sushi/screens/CreateGroup/create_group_page.dart';
 import 'package:sushi/utils/field_user.dart';
 
 AppState newGroupReducer(AppState state, dynamic action) {
@@ -21,7 +20,7 @@ AppState newGroupReducer(AppState state, dynamic action) {
       state.newGroup.local = action.payload as String;
       return state;
     case NewGroupActions.SelectPayment:
-      state.newGroup.payment = action.payload as PaymentType;
+      state.newGroup.payment = action.payload;
       return state;
     case NewGroupActions.RemoveGroup:
       state.newGroup = NewGroup();

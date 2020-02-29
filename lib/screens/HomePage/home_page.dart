@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:redux/redux.dart';
 import 'package:sushi/components/avatar.dart';
+import 'package:sushi/components/separator_height.dart';
 import 'package:sushi/model/Response/Groups.dart';
 import 'package:sushi/model/Response/ResponseStatus.dart';
 import 'package:sushi/network/HomeRequest/home_request.dart';
 import 'package:sushi/redux/actions/UserActions/user_actions.dart';
 import 'package:sushi/redux/store/AppState.dart';
-import 'package:sushi/screens/CreateGroup/create_group_page.dart';
+import 'package:sushi/screens/CreateGroupPage//create_group_page.dart';
+import 'package:sushi/screens/GroupPage/group_page.dart';
 import 'package:sushi/screens/GroupPartecipatePage/group_partecipate_page.dart';
 import 'dart:math' as math show pi;
 
@@ -72,13 +73,9 @@ class _HomePageState extends State<HomePage> {
       builder: (context, store) {
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: Theme.of(context).canvasColor,
-            elevation: 0,
             title: Text(
               "Home",
-              style: TextStyle(
-                color: Theme.of(context).primaryColor,
-              ),
+              style: getStyle(context, Style.appBarTitle),
             ),
             leading: Padding(
               padding: EdgeInsets.only(left: 8.0),
@@ -178,9 +175,7 @@ class _HomePageState extends State<HomePage> {
                           Icon(Icons.search),
                         ],
                       ),
-                      SizedBox(
-                        height: ScreenUtil().setHeight(10),
-                      ),
+                      SeparatorHeight(10),
                       Builder(
                         builder: (context) {
                           if (groups.admin.isEmpty)
@@ -216,9 +211,7 @@ class _HomePageState extends State<HomePage> {
                           );
                         },
                       ),
-                      SizedBox(
-                        height: ScreenUtil().setHeight(25),
-                      ),
+                      SeparatorHeight(25),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
@@ -226,9 +219,7 @@ class _HomePageState extends State<HomePage> {
                           Icon(Icons.search),
                         ],
                       ),
-                      SizedBox(
-                        height: ScreenUtil().setHeight(10),
-                      ),
+                      SeparatorHeight(10),
                       Builder(
                         builder: (context) {
                           if (groups.member.isEmpty)
@@ -253,12 +244,25 @@ class _HomePageState extends State<HomePage> {
                             ),
                             itemBuilder: (BuildContext context, int index) {
                               Group group = groups.member[index];
-                              return Container(
-                                margin: EdgeInsets.all(8),
-                                width: double.infinity,
-                                height: double.infinity,
-                                color: Theme.of(context).accentColor,
-                                child: Text(group.name),
+                              return GestureDetector(
+                                child: Container(
+                                  margin: EdgeInsets.all(8),
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  color: Theme.of(context).accentColor,
+                                  child: Text(
+                                    group.name,
+                                  ),
+                                ),
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) => GroupPage(
+                                        group: group,
+                                      ),
+                                    ),
+                                  );
+                                },
                               );
                             },
                           );
@@ -282,9 +286,7 @@ class _HomePageState extends State<HomePage> {
                 child: Icon(Icons.add),
                 backgroundColor: Colors.green,
                 label: 'Crea gruppo',
-                labelStyle: TextStyle(
-                  fontSize: ScreenUtil().setSp(16.0),
-                ),
+                labelStyle: getStyle(context, Style.speedDialText),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -298,9 +300,7 @@ class _HomePageState extends State<HomePage> {
                 child: Icon(Icons.people),
                 backgroundColor: Colors.blue,
                 label: 'Partecipa ad un gruppo',
-                labelStyle: TextStyle(
-                  fontSize: ScreenUtil().setSp(16.0),
-                ),
+                labelStyle: getStyle(context, Style.speedDialText),
                 onTap: () {
                   Navigator.push(
                     context,

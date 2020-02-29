@@ -3,9 +3,11 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sushi/components/avatar.dart';
 import 'package:sushi/components/custom_button.dart';
+import 'package:sushi/components/separator_height.dart';
 import 'package:sushi/model/Store/User.dart';
 import 'package:sushi/redux/store/AppState.dart';
 import 'package:sushi/screens/ProfilePage/components/groups_counter.dart';
+import 'package:sushi/utils/functions.dart';
 
 class ProfilePage extends StatelessWidget {
   @override
@@ -17,9 +19,7 @@ class ProfilePage extends StatelessWidget {
           appBar: AppBar(
             title: Text(
               user.username,
-              style: TextStyle(
-                color: Theme.of(context).primaryColor,
-              ),
+              style: getStyle(context, Style.appBarTitle),
             ),
             elevation: 0,
             backgroundColor: Theme.of(context).canvasColor,
@@ -40,9 +40,7 @@ class ProfilePage extends StatelessWidget {
                   width: ScreenUtil().setWidth(70),
                 ),
               ),
-              SizedBox(
-                height: ScreenUtil().setHeight(20),
-              ),
+              SeparatorHeight(20),
               Text(
                 user.name + " " + "Arduino",
                 textAlign: TextAlign.center,
@@ -57,9 +55,7 @@ class ProfilePage extends StatelessWidget {
                   fontSize: ScreenUtil().setSp(16),
                 ),
               ),
-              SizedBox(
-                height: ScreenUtil().setHeight(60),
-              ),
+              SeparatorHeight(60),
               Row(
                 children: <Widget>[
                   Expanded(
@@ -76,9 +72,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
-                height: ScreenUtil().setHeight(60),
-              ),
+              SeparatorHeight(60),
               CustomButton(
                 label: "Modifica dati",
                 onTap: () {},

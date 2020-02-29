@@ -5,6 +5,7 @@ import 'package:redux/redux.dart';
 import 'package:sushi/components/custom_button.dart';
 import 'package:sushi/components/custom_text_field.dart';
 import 'package:sushi/components/icon_with_label.dart';
+import 'package:sushi/components/separator_height.dart';
 import 'package:sushi/model/Response/ResponseStatus.dart';
 import 'package:sushi/model/Store/NewGroup.dart';
 import 'package:sushi/model/TextField/InputField.dart';
@@ -13,10 +14,10 @@ import 'package:sushi/redux/actions/NewGroupActions/new_group_actions.dart';
 import 'package:sushi/redux/store/AppState.dart';
 import 'package:sushi/screens/AddMemberPage/add_member_page.dart';
 import 'package:sushi/utils/column_builder.dart';
+import 'package:sushi/utils/enum.dart';
 import 'package:sushi/utils/field_user.dart';
+import 'package:sushi/utils/functions.dart';
 import 'package:sushi/utils/popup.dart';
-
-enum PaymentType { Romana, Equo }
 
 class CreateGroupPage extends StatefulWidget {
   @override
@@ -32,16 +33,9 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Theme.of(context).canvasColor,
-        iconTheme: IconThemeData(
-          color: Theme.of(context).primaryColor,
-        ),
         title: Text(
           "Crea un nuovo gruppo",
-          style: TextStyle(
-            color: Theme.of(context).primaryColor,
-          ),
+          style: getStyle(context, Style.appBarTitle),
         ),
       ),
       body: Form(
@@ -55,9 +49,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                 horizontal: ScreenUtil().setWidth(50),
               ),
               children: <Widget>[
-                SizedBox(
-                  height: ScreenUtil().setHeight(20),
-                ),
+                SeparatorHeight(20),
                 ColumnBuilder(
                   itemCount: fieldUser.inputs.length,
                   itemBuilder: (_, int i) {
@@ -71,9 +63,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                     return SizedBox.shrink();
                   },
                 ),
-                SizedBox(
-                  height: ScreenUtil().setHeight(20),
-                ),
+                SeparatorHeight(20),
                 Builder(
                   builder: (context) {
                     int numMember = store.state.newGroup.users.length;
@@ -94,17 +84,13 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                     );
                   },
                 ),
-                SizedBox(
-                  height: ScreenUtil().setHeight(35),
-                ),
+                SeparatorHeight(35),
                 IconWithLabel(
                   label: "Scegli il locale",
                   icon: Icons.restaurant,
                   onTap: () {},
                 ),
-                SizedBox(
-                  height: ScreenUtil().setHeight(40),
-                ),
+                SeparatorHeight(40),
                 Row(
                   children: <Widget>[
                     Expanded(
@@ -123,7 +109,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                         value: dropdownValue,
                         hint: Text("Metodo di pagamento"),
                         onChanged: (type) {
-                          PaymentType paymentType = type as PaymentType;
+                          PaymentType paymentType = type;
                           setState(() {
                             dropdownValue = paymentType;
                           });
@@ -143,9 +129,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: ScreenUtil().setHeight(40),
-                ),
+                SeparatorHeight(40),
                 CustomButton(
                   label: "Crea",
                   onTap: () async {

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sushi/components/separator_height.dart';
 import 'package:sushi/model/Response/ResponseStatus.dart';
 import 'package:sushi/model/Response/SearchGroup.dart';
 import 'package:sushi/network/GroupPartecipateNetwork/group_partecipate_network.dart';
+import 'package:sushi/utils/functions.dart';
 import 'package:sushi/utils/popup.dart';
 
 class ConfirmGroupPage extends StatelessWidget {
@@ -18,17 +20,10 @@ class ConfirmGroupPage extends StatelessWidget {
     return ProgressHUD(
       child: Scaffold(
         appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: Theme.of(context).primaryColor,
-          ),
-          elevation: 0,
           title: Text(
             "Conferma",
-            style: TextStyle(
-              color: Theme.of(context).primaryColor,
-            ),
+            style: getStyle(context, Style.appBarTitle),
           ),
-          backgroundColor: Theme.of(context).canvasColor,
         ),
         body: ListView(
           padding: EdgeInsets.only(
@@ -43,9 +38,7 @@ class ConfirmGroupPage extends StatelessWidget {
                 radius: ScreenUtil().setWidth(60),
               ),
             ),
-            SizedBox(
-              height: ScreenUtil().setHeight(20),
-            ),
+            SeparatorHeight(20),
             Text(
               searchGroup.name,
               textAlign: TextAlign.center,
@@ -61,17 +54,13 @@ class ConfirmGroupPage extends StatelessWidget {
                 color: Colors.black54,
               ),
             ),
-            SizedBox(
-              height: ScreenUtil().setHeight(50),
-            ),
+          SeparatorHeight(50),
             Text(
               "Vuoi mandare la richiesta di partecipazione al gruppo?",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: ScreenUtil().setSp(16)),
             ),
-            SizedBox(
-              height: ScreenUtil().setHeight(25),
-            ),
+            SeparatorHeight(25),
             Builder(builder: (bContext) {
               return Row(
                 children: <Widget>[
