@@ -9,10 +9,11 @@ import 'package:sushi/components/separator_height.dart';
 import 'package:sushi/model/Response/Groups.dart';
 import 'package:sushi/model/Response/ResponseStatus.dart';
 import 'package:sushi/network/HomeRequest/home_request.dart';
+import 'package:sushi/redux/actions/SelectedGroupActions/selected_group_actions.dart';
 import 'package:sushi/redux/actions/UserActions/user_actions.dart';
 import 'package:sushi/redux/store/AppState.dart';
 import 'package:sushi/screens/CreateGroupPage//create_group_page.dart';
-import 'package:sushi/screens/GroupPage/group_page.dart';
+import 'package:sushi/screens/EventsPage/events_page.dart';
 import 'package:sushi/screens/GroupPartecipatePage/group_partecipate_page.dart';
 import 'dart:math' as math show pi;
 
@@ -75,7 +76,6 @@ class _HomePageState extends State<HomePage> {
           appBar: AppBar(
             title: Text(
               "Home",
-              style: getStyle(context, Style.appBarTitle),
             ),
             leading: Padding(
               padding: EdgeInsets.only(left: 8.0),
@@ -102,8 +102,8 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             actions: <Widget>[
-              Container(
-                margin: EdgeInsets.only(
+              Padding(
+                padding: EdgeInsets.only(
                   right: ScreenUtil().setWidth(20),
                 ),
                 child: Avatar(
@@ -255,11 +255,10 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                                 onTap: () {
+                                  store.dispatch(SaveSelectedGroup(group));
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
-                                      builder: (_) => GroupPage(
-                                        group: group,
-                                      ),
+                                      builder: (_) => EventsPage(),
                                     ),
                                   );
                                 },

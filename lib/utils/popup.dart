@@ -58,7 +58,8 @@ class Popup {
     ).show();
   }
 
-  static confirm(BuildContext context, String desc, {Function onOk}) async {
+  static confirm(BuildContext context, String desc,
+      {Function onOk, onCancel}) async {
     await AwesomeDialog(
       context: context,
       dialogType: DialogType.WARNING,
@@ -70,9 +71,7 @@ class Popup {
       ),
       btnCancel: FlatButton(
         child: Text("Annulla"),
-        onPressed: () {
-          Navigator.pop(context);
-        },
+        onPressed: onCancel,
       ),
       tittle: "Attenzione",
       desc: desc,

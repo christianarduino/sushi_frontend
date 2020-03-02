@@ -5,15 +5,17 @@ import 'package:sushi/components/separator_height.dart';
 import 'package:sushi/model/Response/ResponseStatus.dart';
 import 'package:sushi/model/Response/SearchGroup.dart';
 import 'package:sushi/network/GroupPartecipateNetwork/group_partecipate_network.dart';
-import 'package:sushi/utils/functions.dart';
 import 'package:sushi/utils/popup.dart';
 
 class ConfirmGroupPage extends StatelessWidget {
   final SearchGroup searchGroup;
   final String userId;
 
-  const ConfirmGroupPage({Key key, this.searchGroup, this.userId})
-      : super(key: key);
+  const ConfirmGroupPage({
+    Key key,
+    this.searchGroup,
+    this.userId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,6 @@ class ConfirmGroupPage extends StatelessWidget {
         appBar: AppBar(
           title: Text(
             "Conferma",
-            style: getStyle(context, Style.appBarTitle),
           ),
         ),
         body: ListView(
@@ -54,64 +55,66 @@ class ConfirmGroupPage extends StatelessWidget {
                 color: Colors.black54,
               ),
             ),
-          SeparatorHeight(50),
+            SeparatorHeight(50),
             Text(
               "Vuoi mandare la richiesta di partecipazione al gruppo?",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: ScreenUtil().setSp(16)),
             ),
             SeparatorHeight(25),
-            Builder(builder: (bContext) {
-              return Row(
-                children: <Widget>[
-                  Expanded(
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.check,
-                        color: Colors.green,
-                      ),
-                      iconSize: ScreenUtil().setWidth(40),
-                      onPressed: () async {
-                        final progress = ProgressHUD.of(bContext);
-                        progress.show();
+            Builder(
+              builder: (bContext) {
+                return Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.check,
+                          color: Colors.green,
+                        ),
+                        iconSize: ScreenUtil().setWidth(40),
+                        onPressed: () async {
+                          final progress = ProgressHUD.of(bContext);
+                          progress.show();
 
-                        ResponseStatus status =
-                            await GroupPartecipateNetwork.sendPending(
-                          searchGroup.id,
-                          userId,
-                        );
-
-                        progress.dismiss();
-
-                        if (status.success) {
-                          await Popup.success(
-                            bContext,
-                            'La richiesta al gruppo ${searchGroup.name} è stata inviata correttamente',
+                          ResponseStatus status =
+                              await GroupPartecipateNetwork.sendPending(
+                            searchGroup.id,
+                            userId,
                           );
-                          Navigator.pop(context, true);
-                        } else {
-                          print(status.data);
-                          await Popup.error(
-                            context,
-                            'La richiesta al gruppo ${searchGroup.name} non è andata a buon fine. Riprova',
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.close,
-                        color: Theme.of(context).accentColor,
+
+                          progress.dismiss();
+
+                          if (status.success) {
+                            await Popup.success(
+                              bContext,
+                              'La richiesta al gruppo ${searchGroup.name} è stata inviata correttamente',
+                            );
+                            Navigator.pop(context, true);
+                          } else {
+                            print(status.data);
+                            await Popup.error(
+                              context,
+                              'La richiesta al gruppo ${searchGroup.name} non è andata a buon fine. Riprova',
+                            );
+                          }
+                        },
                       ),
-                      iconSize: ScreenUtil().setWidth(40),
-                      onPressed: () => Navigator.pop(context),
                     ),
-                  ),
-                ],
-              );
-            }),
+                    Expanded(
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.close,
+                          color: Theme.of(context).accentColor,
+                        ),
+                        iconSize: ScreenUtil().setWidth(40),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
           ],
         ),
       ),

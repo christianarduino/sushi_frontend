@@ -84,7 +84,7 @@ class MakeRequest {
     }
   }
 
-  static Future delete(String endpoint, Map<String, String> body) async {
+  static Future delete(String endpoint) async {
     try {
       http.Response response = await http.delete(url + endpoint);
       final responseJson = await jsonDecode(response.body);

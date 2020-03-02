@@ -7,7 +7,6 @@ import 'package:sushi/components/separator_height.dart';
 import 'package:sushi/model/Store/User.dart';
 import 'package:sushi/redux/store/AppState.dart';
 import 'package:sushi/screens/ProfilePage/components/groups_counter.dart';
-import 'package:sushi/utils/functions.dart';
 
 class ProfilePage extends StatelessWidget {
   @override
@@ -19,7 +18,6 @@ class ProfilePage extends StatelessWidget {
           appBar: AppBar(
             title: Text(
               user.username,
-              style: getStyle(context, Style.appBarTitle),
             ),
             elevation: 0,
             backgroundColor: Theme.of(context).canvasColor,

@@ -16,7 +16,6 @@ import 'package:sushi/screens/AddMemberPage/add_member_page.dart';
 import 'package:sushi/utils/column_builder.dart';
 import 'package:sushi/utils/enum.dart';
 import 'package:sushi/utils/field_user.dart';
-import 'package:sushi/utils/functions.dart';
 import 'package:sushi/utils/popup.dart';
 
 class CreateGroupPage extends StatefulWidget {
@@ -35,7 +34,6 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
       appBar: AppBar(
         title: Text(
           "Crea un nuovo gruppo",
-          style: getStyle(context, Style.appBarTitle),
         ),
       ),
       body: Form(
@@ -84,14 +82,8 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                     );
                   },
                 ),
-                SeparatorHeight(35),
-                IconWithLabel(
-                  label: "Scegli il locale",
-                  icon: Icons.restaurant,
-                  onTap: () {},
-                ),
                 SeparatorHeight(40),
-                Row(
+                /*Row(
                   children: <Widget>[
                     Expanded(
                       child: InkWell(
@@ -128,8 +120,8 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                       ),
                     ),
                   ],
-                ),
-                SeparatorHeight(40),
+                ),*/
+                //SeparatorHeight(40),
                 CustomButton(
                   label: "Crea",
                   onTap: () async {

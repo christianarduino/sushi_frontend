@@ -14,7 +14,6 @@ import 'package:sushi/redux/actions/UserActions/user_actions.dart';
 import 'package:sushi/redux/store/AppState.dart';
 import 'package:sushi/screens/HomePage/home_page.dart';
 import 'package:sushi/utils/column_builder.dart';
-import 'package:sushi/utils/functions.dart';
 import 'package:sushi/utils/popup.dart';
 import 'package:sushi/utils/field_user.dart';
 
@@ -34,7 +33,6 @@ class _RegisterPageState extends State<RegisterPage> {
         appBar: AppBar(
           title: Text(
             "Sign Up",
-            style: getStyle(context, Style.appBarTitle),
           ),
         ),
         body: SafeArea(
@@ -89,7 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   }
 
                                   store.dispatch(SaveUser(status.data));
-                                  Navigator.push(
+                                  Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
                                       builder: (_) => HomePage(),

@@ -28,7 +28,7 @@ class GroupPartecipateNetwork {
   ) async {
     try {
       String json = jsonEncode({"userId": userId, "groupId": groupId});
-      dynamic decodedJson = await MakeRequest.post("group/pending", json);
+      dynamic decodedJson = await MakeRequest.post("group/pending/send", json);
 
       return ResponseStatus(!decodedJson['error'], decodedJson['message']);
     } catch (e) {

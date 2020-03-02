@@ -35,6 +35,9 @@ class _SushiAppState extends State<SushiApp> {
     initStatusBar();
   }
 
+  final accentColor = Color(0xFFEF586C);
+  final primaryColor = Color(0xFF433C3F);
+
   @override
   Widget build(BuildContext context) {
     return StoreProvider(
@@ -43,18 +46,25 @@ class _SushiAppState extends State<SushiApp> {
         theme: ThemeData(
           canvasColor: Color(0xfffafafa),
           appBarTheme: AppBarTheme(
+            textTheme: TextTheme(
+              title: TextStyle(
+                color: primaryColor,
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
             elevation: 0,
             color: Color(0xfffafafa),
             iconTheme: IconThemeData(
-              color: Color(0xFF433C3F),
+              color: primaryColor,
             ),
-            brightness: Brightness.dark,
+            brightness: Brightness.light,
           ),
           fontFamily: 'Poppins',
           inputDecorationTheme: InputDecorationTheme(
             focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-                color: Theme.of(context).accentColor,
+                color: accentColor,
                 width: 1.0,
               ),
             ),
@@ -62,12 +72,12 @@ class _SushiAppState extends State<SushiApp> {
               color: Colors.grey,
             ),
           ),
-          primaryColor: Color(0xFF433C3F),
-          cursorColor: Color(0xFFEF586C),
-          accentColor: Color(0xFFEF586C),
+          primaryColor: primaryColor,
+          cursorColor: accentColor,
+          accentColor: accentColor,
           textTheme: TextTheme(
             body1: TextStyle(
-              color: Color(0xFF433C3F),
+              color: primaryColor,
             ),
             subtitle: TextStyle(
               color: Color(0xFFD1CFD0),
