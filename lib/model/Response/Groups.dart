@@ -16,8 +16,9 @@ class Groups {
 @JsonSerializable()
 class Group {
   String id, name, description;
+  bool isAdmin;
 
-  Group(this.id, this.name, this.description);
+  Group(this.id, this.name, this.description, this.isAdmin);
 
   factory Group.fromJson(Map<String, dynamic> json) => _$GroupFromJson(json);
   Map<String, dynamic> toJson() => _$GroupToJson(this);

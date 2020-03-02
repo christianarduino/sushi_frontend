@@ -29,6 +29,7 @@ Group _$GroupFromJson(Map<String, dynamic> json) {
     json['id'] as String,
     json['name'] as String,
     json['description'] as String,
+    json['isAdmin'] as bool,
   );
 }
 
@@ -36,4 +37,5 @@ Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'description': instance.description,
+      'isAdmin': instance.isAdmin,
     };

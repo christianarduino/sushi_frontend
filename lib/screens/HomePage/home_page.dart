@@ -200,6 +200,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             itemBuilder: (BuildContext context, int index) {
                               Group group = groups.admin[index];
+                              group.isAdmin = true;
                               return Container(
                                 margin: EdgeInsets.all(8),
                                 width: double.infinity,
@@ -244,6 +245,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             itemBuilder: (BuildContext context, int index) {
                               Group group = groups.member[index];
+                              group.isAdmin = false;
                               return GestureDetector(
                                 child: Container(
                                   margin: EdgeInsets.all(8),

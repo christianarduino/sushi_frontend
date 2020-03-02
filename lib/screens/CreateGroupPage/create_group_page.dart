@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:redux/redux.dart';
@@ -30,116 +31,134 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Crea un nuovo gruppo",
+    return ProgressHUD(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            "Crea un nuovo gruppo",
+          ),
         ),
-      ),
-      body: Form(
-        key: _formKey,
-        child: StoreConnector<AppState, Store<AppState>>(
-          converter: (store) => store,
-          onDispose: (store) => store.dispatch(RemoveGroup()),
-          builder: (context, store) {
-            return ListView(
-              padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(50),
-              ),
-              children: <Widget>[
-                SeparatorHeight(20),
-                ColumnBuilder(
-                  itemCount: fieldUser.inputs.length,
-                  itemBuilder: (_, int i) {
-                    InputField field = fieldUser.inputs[i];
-                    if (field.label.contains("gruppo")) {
-                      return CustomTextField(
-                        inputField: field,
-                        inputTextField: fieldUser,
-                      );
-                    }
-                    return SizedBox.shrink();
-                  },
+        body: Form(
+          key: _formKey,
+          child: StoreConnector<AppState, Store<AppState>>(
+            converter: (store) => store,
+            onDispose: (store) => store.dispatch(RemoveGroup()),
+            builder: (context, store) {
+              return ListView(
+                padding: EdgeInsets.symmetric(
+                  horizontal: ScreenUtil().setWidth(50),
                 ),
-                SeparatorHeight(20),
-                Builder(
-                  builder: (context) {
-                    int numMember = store.state.newGroup.users.length;
-                    bool isEmpty = numMember == 0;
-                    String concat =
-                        numMember == 1 ? "membro aggiunto" : "membri aggiunti";
-                    return IconWithLabel(
-                      label: isEmpty ? "Aggiungi membri" : "$numMember $concat",
-                      icon: Icons.add_circle_outline,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => AddMemberPage(),
-                          ),
+                children: <Widget>[
+                  SeparatorHeight(20),
+                  ColumnBuilder(
+                    itemCount: fieldUser.inputs.length,
+                    itemBuilder: (_, int i) {
+                      InputField field = fieldUser.inputs[i];
+                      if (field.label.contains("gruppo")) {
+                        return CustomTextField(
+                          inputField: field,
+                          inputTextField: fieldUser,
                         );
-                      },
-                    );
-                  },
-                ),
-                SeparatorHeight(40),
-                /*Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: InkWell(
-                        child: Icon(
-                          Icons.info_outline,
-                          color: Theme.of(context).accentColor,
-                        ),
-                        onTap: () => Popup.info(context),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 5,
-                      child: DropdownButton(
-                        isExpanded: true,
-                        value: dropdownValue,
-                        hint: Text("Metodo di pagamento"),
-                        onChanged: (type) {
-                          PaymentType paymentType = type;
-                          setState(() {
-                            dropdownValue = paymentType;
-                          });
-                          store.dispatch(SelectPayment(paymentType));
+                      }
+                      return SizedBox.shrink();
+                    },
+                  ),
+                  SeparatorHeight(20),
+                  Builder(
+                    builder: (context) {
+                      int numMember = store.state.newGroup.users.length;
+                      bool isEmpty = numMember == 0;
+                      String concat = numMember == 1
+                          ? "membro aggiunto"
+                          : "membri aggiunti";
+                      return IconWithLabel(
+                        label:
+                            isEmpty ? "Aggiungi membri" : "$numMember $concat",
+                        icon: Icons.add_circle_outline,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => AddMemberPage(),
+                            ),
+                          );
                         },
-                        items: [
-                          DropdownMenuItem(
-                            child: Text("Romana"),
-                            value: PaymentType.Romana,
+                      );
+                    },
+                  ),
+                  SeparatorHeight(40),
+                  /*Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: InkWell(
+                          child: Icon(
+                            Icons.info_outline,
+                            color: Theme.of(context).accentColor,
                           ),
-                          DropdownMenuItem(
-                            child: Text("Equo"),
-                            value: PaymentType.Equo,
-                          ),
-                        ],
+                          onTap: () => Popup.info(context),
+                        ),
                       ),
-                    ),
-                  ],
-                ),*/
-                //SeparatorHeight(40),
-                CustomButton(
-                  label: "Crea",
-                  onTap: () async {
-                    if (_formKey.currentState.validate()) {
-                      store.dispatch(SelectNameAndDesc(fieldUser));
-                      String userId = store.state.user.id;
-                      NewGroup group = store.state.newGroup;
-                      ResponseStatus status =
-                          await CreateGroupNetwork.createGroup(group, userId);
+                      Expanded(
+                        flex: 5,
+                        child: DropdownButton(
+                          isExpanded: true,
+                          value: dropdownValue,
+                          hint: Text("Metodo di pagamento"),
+                          onChanged: (type) {
+                            PaymentType paymentType = type;
+                            setState(() {
+                              dropdownValue = paymentType;
+                            });
+                            store.dispatch(SelectPayment(paymentType));
+                          },
+                          items: [
+                            DropdownMenuItem(
+                              child: Text("Romana"),
+                              value: PaymentType.Romana,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Equo"),
+                              value: PaymentType.Equo,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),*/
+                  //SeparatorHeight(40),
+                  Builder(
+                    builder: (context) {
+                      return CustomButton(
+                        label: "Crea",
+                        onTap: () async {
+                          if (_formKey.currentState.validate()) {
+                            final progress = ProgressHUD.of(context);
+                            progress.show();
+                            store.dispatch(SelectNameAndDesc(fieldUser));
+                            String userId = store.state.user.id;
+                            NewGroup group = store.state.newGroup;
+                            ResponseStatus status =
+                                await CreateGroupNetwork.createGroup(
+                                    group, userId);
+                            progress.dismiss();
 
-                      if (!status.success)
-                        await Popup.error(context, status.data);
-                    }
-                  },
-                ),
-              ],
-            );
-          },
+                            if (!status.success)
+                              return await Popup.error(context, status.data);
+
+                            await Popup.success(
+                              context,
+                              'Complimenti! Hai creato il tuo gruppo chiamato "${fieldUser.groupName}"',
+                            );
+                            Navigator.pop(context);
+                          }
+                        },
+                      );
+                    },
+                  ),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
