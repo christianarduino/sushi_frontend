@@ -12,7 +12,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, User>(
-      converter: (store) => store.state.user,
+      converter: (store) => store.state.loggedUser,
       builder: (context, user) {
         return Scaffold(
           appBar: AppBar(

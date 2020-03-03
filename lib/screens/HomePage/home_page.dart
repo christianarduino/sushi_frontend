@@ -54,7 +54,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   void getGroups(Store<AppState> store) async {
-    ResponseStatus status = await HomeRequest.getGroups(store.state.user.id);
+    ResponseStatus status =
+        await HomeRequest.getGroups(store.state.loggedUser.id);
     setState(() {
       groupsStatus = status;
     });
@@ -201,12 +202,22 @@ class _HomePageState extends State<HomePage> {
                             itemBuilder: (BuildContext context, int index) {
                               Group group = groups.admin[index];
                               group.isAdmin = true;
-                              return Container(
-                                margin: EdgeInsets.all(8),
-                                width: double.infinity,
-                                height: double.infinity,
-                                color: Theme.of(context).accentColor,
-                                child: Text(group.name),
+                              return GestureDetector(
+                                child: Container(
+                                  margin: EdgeInsets.all(8),
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  color: Theme.of(context).accentColor,
+                                  child: Text(group.name),
+                                ),
+                                onTap: () {
+                                  store.dispatch(SaveSelectedGroup(group));
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) => EventsPage(),
+                                    ),
+                                  );
+                                },
                               );
                             },
                           );

@@ -8,7 +8,6 @@ import 'package:sushi/components/custom_text_field.dart';
 import 'package:sushi/components/icon_with_label.dart';
 import 'package:sushi/components/separator_height.dart';
 import 'package:sushi/model/Response/ResponseStatus.dart';
-import 'package:sushi/model/Store/NewGroup.dart';
 import 'package:sushi/model/TextField/InputField.dart';
 import 'package:sushi/network/CreateGroupNetwork/create_network_group.dart';
 import 'package:sushi/redux/actions/NewGroupActions/new_group_actions.dart';
@@ -42,7 +41,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
           key: _formKey,
           child: StoreConnector<AppState, Store<AppState>>(
             converter: (store) => store,
-            onDispose: (store) => store.dispatch(RemoveGroup()),
+            onDispose: (store) => store.dispatch(RemoveUsers()),
             builder: (context, store) {
               return ListView(
                 padding: EdgeInsets.symmetric(
@@ -66,7 +65,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                   SeparatorHeight(20),
                   Builder(
                     builder: (context) {
-                      int numMember = store.state.newGroup.users.length;
+                      int numMember = store.state.searchUser.users.length;
                       bool isEmpty = numMember == 0;
                       String concat = numMember == 1
                           ? "membro aggiunto"
@@ -79,7 +78,9 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => AddMemberPage(),
+                              builder: (_) => AddMemberPage(
+                                isFromDetail: false,
+                              ),
                             ),
                           );
                         },
@@ -135,11 +136,15 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                             final progress = ProgressHUD.of(context);
                             progress.show();
                             store.dispatch(SelectNameAndDesc(fieldUser));
-                            String userId = store.state.user.id;
-                            NewGroup group = store.state.newGroup;
+                            String userId = store.state.loggedUser.id;
+                            List<String> userIds =
+                                store.state.searchUser.userIds;
                             ResponseStatus status =
                                 await CreateGroupNetwork.createGroup(
-                                    group, userId);
+                              fieldUser,
+                              userIds,
+                              userId,
+                            );
                             progress.dismiss();
 
                             if (!status.success)

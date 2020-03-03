@@ -32,7 +32,7 @@ class _GroupPartecipatePageState extends State<GroupPartecipatePage> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, Store<AppState>>(
       key: UniqueKey(),
-      onInit: (store) => userId = store.state.user.id,
+      onInit: (store) => userId = store.state.loggedUser.id,
       converter: (store) => store,
       builder: (context, store) {
         return Scaffold(

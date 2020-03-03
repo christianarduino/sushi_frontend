@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:redux/redux.dart';
 import 'package:sushi/components/separator_height.dart';
 import 'package:sushi/model/Response/Groups.dart';
 import 'package:sushi/model/Response/ResponseStatus.dart';
 import 'package:sushi/network/GroupDetailNetwork/group_detail_network.dart';
+import 'package:sushi/redux/actions/NewGroupActions/new_group_actions.dart';
 import 'package:sushi/redux/store/AppState.dart';
+import 'package:sushi/screens/AddMemberPage/add_member_page.dart';
 import 'package:sushi/screens/GroupDetailPage/components/grid_card.dart';
 import 'package:sushi/screens/HomePage/home_page.dart';
 import 'package:sushi/utils/popup.dart';
@@ -14,9 +17,10 @@ import 'package:sushi/utils/popup.dart';
 class GroupDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, Group>(
-      converter: (store) => store.state.selectedGroup,
-      builder: (context, group) {
+    return StoreConnector<AppState, Store<AppState>>(
+      converter: (store) => store,
+      builder: (context, store) {
+        Group group = store.state.selectedGroup.group;
         return ProgressHUD(
           child: Scaffold(
             appBar: AppBar(
@@ -44,6 +48,9 @@ class GroupDetailPage extends StatelessWidget {
                   ),
                   SeparatorHeight(50),
                   GridView(
+                    padding: EdgeInsets.all(
+                      ScreenUtil().setWidth(9),
+                    ),
                     physics: NeverScrollableScrollPhysics(),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
@@ -54,10 +61,49 @@ class GroupDetailPage extends StatelessWidget {
                     shrinkWrap: true,
                     children: <Widget>[
                       GridCard(
-                        icon: Icons.add,
+                        icon: Icons.check,
                         iconColor: Colors.green,
-                        title: "Aggiungi membri",
+                        title: "Conferma richieste",
                       ),
+                      Builder(builder: (bContext) {
+                        return GridCard(
+                          icon: Icons.add,
+                          iconColor: Colors.indigo,
+                          title: "Aggiungi membri",
+                          onTap: () async {
+                            store.dispatch(ResetMember());
+                            List<String> ids = await Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => AddMemberPage(
+                                  groupId: group.id,
+                                  isFromDetail: true,
+                                ),
+                              ),
+                            );
+                            if (ids == null)
+                              return Popup.error(
+                                context,
+                                'Non hai aggiunto nessun utente. Premi su "Salva" dopo averli selezionati',
+                              );
+
+                            final progress = ProgressHUD.of(bContext);
+                            progress.show();
+                            ResponseStatus status =
+                                await GroupDetailNetwork.addMember(
+                              ids,
+                              group.id,
+                            );
+                            progress.dismiss();
+                            if (!status.success)
+                              return await Popup.error(context, status.data);
+
+                            return await Popup.success(
+                              context,
+                              "Complimenti, hai aggiunti ${ids.length} utenti al gruppo",
+                            );
+                          },
+                        );
+                      }),
                       GridCard(
                         icon: Icons.edit,
                         iconColor: Colors.blue,

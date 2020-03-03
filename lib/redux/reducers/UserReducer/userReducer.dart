@@ -7,11 +7,11 @@ AppState userReducer(AppState state, dynamic action) {
   switch (action.type) {
     case UserActions.SaveUser:
       User user = action.payload as User;
-      state.user = user;
+      state.loggedUser = user;
       return state;
     case UserActions.SaveUserGroup:
       Groups groups = action.payload as Groups;
-      state.user.setGroup(groups);
+      state.loggedUser.setGroup(groups);
       return state;
     case UserActions.ResetData:
       state = AppState();

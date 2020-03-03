@@ -87,12 +87,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                   }
 
                                   store.dispatch(SaveUser(status.data));
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => HomePage(),
-                                    ),
-                                  );
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                        builder: (context) => HomePage(),
+                                      ),
+                                      (Route<dynamic> route) => false);
                                 }
                               },
                             );

@@ -1,14 +1,27 @@
+import 'dart:convert';
+
 import 'package:sushi/api/make_request.dart';
 import 'package:sushi/model/Response/ResponseStatus.dart';
-import 'package:sushi/model/Store/NewGroup.dart';
+import 'package:sushi/utils/field_user.dart';
 
 class CreateGroupNetwork {
   static Future<ResponseStatus> createGroup(
-      NewGroup group, String userId) async {
+    FieldUser fieldUser,
+    List<String> userIds,
+    String userId,
+  ) async {
     try {
+      Map<String, dynamic> newGroup = {
+        "name": fieldUser.groupName,
+        "userIds": userIds,
+      };
+      if (fieldUser.groupDescription != null &&
+          fieldUser.groupDescription != "")
+        newGroup['description'] = fieldUser.groupDescription;
+
       dynamic decodedJson = await MakeRequest.post(
         "group/$userId",
-        group.toJson(),
+        jsonEncode(newGroup),
       );
       if (decodedJson['error'])
         return ResponseStatus(

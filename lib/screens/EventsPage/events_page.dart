@@ -22,7 +22,7 @@ class _EventsPageState extends State<EventsPage> {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, Group>(
-        converter: (store) => store.state.selectedGroup,
+        converter: (store) => store.state.selectedGroup.group,
         builder: (context, group) {
           return Scaffold(
             appBar: AppBar(
@@ -30,29 +30,43 @@ class _EventsPageState extends State<EventsPage> {
                 group.name,
               ),
               actions: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(
-                    right: ScreenUtil().setWidth(15),
-                  ),
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.people_outline,
-                    ),
-                    iconSize: ScreenUtil().setWidth(30),
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => GroupDetailPage(),
+                Builder(
+                  builder: (context) {
+                    if (group.isAdmin)
+                      return Padding(
+                        padding: EdgeInsets.only(
+                          right: ScreenUtil().setWidth(15),
+                        ),
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.people_outline,
+                          ),
+                          iconSize: ScreenUtil().setWidth(30),
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => GroupDetailPage(),
+                              ),
+                            );
+                          },
                         ),
                       );
-                    },
-                  ),
+
+                    return SizedBox.shrink();
+                  },
                 ),
               ],
             ),
-            floatingActionButton: FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () {},
+            floatingActionButton: Builder(
+              builder: (context) {
+                if (group.isAdmin)
+                  return FloatingActionButton(
+                    child: Icon(Icons.add),
+                    onPressed: () {},
+                  );
+
+                return SizedBox.shrink();
+              },
             ),
             body: SafeArea(
               child: FutureBuilder(

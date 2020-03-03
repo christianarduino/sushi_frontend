@@ -8,7 +8,7 @@ AppState selectedGroupReducer(AppState state, dynamic action) {
       state.selectedGroup = null;
       return state;
     case SelectedGroupActions.SaveGroup:
-      state.selectedGroup = action.payload as Group;
+      state.selectedGroup.group = action.payload as Group;
       return state;
   }
 
