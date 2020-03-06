@@ -88,52 +88,13 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                     },
                   ),
                   SeparatorHeight(40),
-                  /*Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: InkWell(
-                          child: Icon(
-                            Icons.info_outline,
-                            color: Theme.of(context).accentColor,
-                          ),
-                          onTap: () => Popup.info(context),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 5,
-                        child: DropdownButton(
-                          isExpanded: true,
-                          value: dropdownValue,
-                          hint: Text("Metodo di pagamento"),
-                          onChanged: (type) {
-                            PaymentType paymentType = type;
-                            setState(() {
-                              dropdownValue = paymentType;
-                            });
-                            store.dispatch(SelectPayment(paymentType));
-                          },
-                          items: [
-                            DropdownMenuItem(
-                              child: Text("Romana"),
-                              value: PaymentType.Romana,
-                            ),
-                            DropdownMenuItem(
-                              child: Text("Equo"),
-                              value: PaymentType.Equo,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),*/
-                  //SeparatorHeight(40),
                   Builder(
-                    builder: (context) {
+                    builder: (bContext) {
                       return CustomButton(
                         label: "Crea",
                         onTap: () async {
                           if (_formKey.currentState.validate()) {
-                            final progress = ProgressHUD.of(context);
+                            final progress = ProgressHUD.of(bContext);
                             progress.show();
                             store.dispatch(SelectNameAndDesc(fieldUser));
                             String userId = store.state.loggedUser.id;
@@ -148,10 +109,10 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                             progress.dismiss();
 
                             if (!status.success)
-                              return await Popup.error(context, status.data);
+                              return await Popup.error(bContext, status.data);
 
                             await Popup.success(
-                              context,
+                              bContext,
                               'Complimenti! Hai creato il tuo gruppo chiamato "${fieldUser.groupName}"',
                             );
                             Navigator.pop(context);

@@ -6,6 +6,7 @@ import 'package:sushi/model/Response/ResponseStatus.dart';
 import 'package:sushi/model/Store/SearchUser.dart';
 import 'package:sushi/model/Store/User.dart';
 import 'package:sushi/network/ConfirmRequestNetwork/confirm_request_network.dart';
+import 'package:sushi/network/GroupDetailNetwork/group_detail_network.dart';
 import 'package:sushi/redux/actions/NewGroupActions/new_group_actions.dart';
 import 'package:sushi/redux/store/AppState.dart';
 import 'package:sushi/utils/popup.dart';
@@ -49,9 +50,9 @@ class _ConfirmRequestPageState extends State<ConfirmRequestPage> {
                         final progress = ProgressHUD.of(sContext);
                         progress.show();
                         ResponseStatus status =
-                            await ConfirmRequestNetwork.addUsers(
-                          groupId,
+                            await GroupDetailNetwork.addMember(
                           searchUser.userIds,
+                          groupId,
                         );
                         progress.dismiss();
 

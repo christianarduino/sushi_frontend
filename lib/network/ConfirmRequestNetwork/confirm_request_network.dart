@@ -20,19 +20,4 @@ class ConfirmRequestNetwork {
       return ResponseStatus(false, "Si è verificato un errore. Riprova");
     }
   }
-
-  static Future<ResponseStatus> addUsers(
-      String groupId, List<String> userIds) async {
-    try {
-      final decodedJson = await MakeRequest.post(
-        "group/pending/add/$groupId",
-        jsonEncode({"userIds": userIds}),
-      );
-      print(decodedJson);
-      return ResponseStatus(!decodedJson['error'], decodedJson['message']);
-    } catch (e) {
-      print(e);
-      return ResponseStatus(false, "Si è verificato un errore. Riprova");
-    }
-  }
 }
