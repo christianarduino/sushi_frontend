@@ -8,8 +8,10 @@ import 'package:sushi/model/Response/Groups.dart';
 import 'package:sushi/model/Response/ResponseStatus.dart';
 import 'package:sushi/network/GroupDetailNetwork/group_detail_network.dart';
 import 'package:sushi/redux/actions/NewGroupActions/new_group_actions.dart';
+import 'package:sushi/redux/actions/SelectedGroupActions/selected_group_actions.dart';
 import 'package:sushi/redux/store/AppState.dart';
 import 'package:sushi/screens/AddMemberPage/add_member_page.dart';
+import 'package:sushi/screens/ConfirmRequestPage/confirm_request_page.dart';
 import 'package:sushi/screens/GroupDetailPage/components/grid_card.dart';
 import 'package:sushi/screens/HomePage/home_page.dart';
 import 'package:sushi/utils/popup.dart';
@@ -64,6 +66,14 @@ class GroupDetailPage extends StatelessWidget {
                         icon: Icons.check,
                         iconColor: Colors.green,
                         title: "Conferma richieste",
+                        onTap: () {
+                          store.dispatch(RemoveUserPending());
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => ConfirmRequestPage(),
+                            ),
+                          );
+                        },
                       ),
                       Builder(builder: (bContext) {
                         return GridCard(

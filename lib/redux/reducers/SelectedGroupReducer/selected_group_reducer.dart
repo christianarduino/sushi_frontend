@@ -10,6 +10,9 @@ AppState selectedGroupReducer(AppState state, dynamic action) {
     case SelectedGroupActions.SaveGroup:
       state.selectedGroup.group = action.payload as Group;
       return state;
+    case SelectedGroupActions.RemoveGroup:
+      state.selectedGroup.pendingUser = null;
+      return state;
   }
 
   return state;
