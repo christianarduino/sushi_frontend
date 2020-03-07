@@ -1,6 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-
-part 'Groups.g.dart';
+import 'dart:math';
 
 @JsonSerializable()
 class Groups {
@@ -9,17 +8,35 @@ class Groups {
 
   Groups(this.admin, this.member);
 
-  factory Groups.fromJson(Map<String, dynamic> json) => _$GroupsFromJson(json);
-  Map<String, dynamic> toJson() => _$GroupsToJson(this);
+  Groups.fromJson(Map<String, dynamic> json)
+      : admin =
+            json['admin'].map<Group>((ad) => Group.fromJson(ad, true)).toList(),
+        member = json['member']
+            .map<Group>((mb) => Group.fromJson(mb, false))
+            .toList();
 }
 
-@JsonSerializable()
 class Group {
-  String id, name, description;
+  String id, name, description, image;
   bool isAdmin;
 
-  Group(this.id, this.name, this.description, this.isAdmin);
+  Group(this.id, this.name, this.description, this.isAdmin, this.image);
 
-  factory Group.fromJson(Map<String, dynamic> json) => _$GroupFromJson(json);
-  Map<String, dynamic> toJson() => _$GroupToJson(this);
+  Group.fromJson(Map<String, dynamic> json, bool isAdmin)
+      : id = json['id'],
+        name = json['name'],
+        description = json['description'],
+        isAdmin = isAdmin,
+        image = _getRandomImage(isAdmin);
+}
+
+String _genRandomNumber(int min, int max) {
+  Random random = new Random();
+  int num = min + random.nextInt(max - min);
+  return num.toString();
+}
+
+String _getRandomImage(bool isAdmin) {
+  String type = isAdmin ? "admin" : "member";
+  return "assets/$type/sushi-${_genRandomNumber(1, 5)}.jpg";
 }

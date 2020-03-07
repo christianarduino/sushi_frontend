@@ -13,6 +13,7 @@ class HomeRequest {
       Groups groups = Groups.fromJson(decodedJson);
       return ResponseStatus(true, groups);
     } catch (e) {
+      print(e);
       return ResponseStatus(false, "Qualcosa è andato storto. Aggiorna");
     }
   }

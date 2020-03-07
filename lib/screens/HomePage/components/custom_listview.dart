@@ -5,7 +5,6 @@ import 'package:sushi/model/Response/Groups.dart';
 import 'package:sushi/redux/actions/SelectedGroupActions/selected_group_actions.dart';
 import 'package:sushi/redux/store/AppState.dart';
 import 'package:sushi/screens/EventsPage/events_page.dart';
-import 'dart:math';
 
 class CustomListView extends StatelessWidget {
   final bool isAdmin;
@@ -18,17 +17,6 @@ class CustomListView extends StatelessWidget {
     this.store,
     this.isAdmin,
   }) : super(key: key);
-
-  String genRandomNumber(int min, int max) {
-    Random random = new Random();
-    int num = min + random.nextInt(max - min);
-    return num.toString();
-  }
-
-  String getRandomImage() {
-    String type = isAdmin ? "admin" : "member";
-    return "assets/$type/sushi-${genRandomNumber(1, 5)}.jpg";
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +34,7 @@ class CustomListView extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: AssetImage(
-                  getRandomImage(),
-                ),
+                image: AssetImage(group.image),
               ),
             ),
             child: Stack(
