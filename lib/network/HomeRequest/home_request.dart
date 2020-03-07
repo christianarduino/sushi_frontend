@@ -10,7 +10,6 @@ class HomeRequest {
       if (decodedJson['error'])
         return ResponseStatus(false, decodedJson['message']);
 
-      print(userId);
       Groups groups = Groups.fromJson(decodedJson);
       return ResponseStatus(true, groups);
     } catch (e) {

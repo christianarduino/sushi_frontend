@@ -15,6 +15,8 @@ import 'package:sushi/redux/store/AppState.dart';
 import 'package:sushi/screens/CreateGroupPage//create_group_page.dart';
 import 'package:sushi/screens/EventsPage/events_page.dart';
 import 'package:sushi/screens/GroupPartecipatePage/group_partecipate_page.dart';
+import 'package:sushi/screens/HomePage/components/chip.dart';
+import 'package:sushi/screens/HomePage/components/custom_listview.dart';
 import 'dart:math' as math show pi;
 
 import 'package:sushi/screens/LoginPage/login_page.dart';
@@ -31,6 +33,7 @@ class _HomePageState extends State<HomePage> {
   Groups groups;
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+  bool firstSelected = true;
 
   @override
   void initState() {
@@ -162,125 +165,81 @@ class _HomePageState extends State<HomePage> {
                   controller: _refreshController,
                   onRefresh: () => _onRefresh(store),
                   enablePullDown: true,
-                  child: ListView(
+                  child: Padding(
                     padding: EdgeInsets.only(
-                      top: ScreenUtil().setHeight(35),
+                      top: ScreenUtil().setHeight(25),
                       left: ScreenUtil().setWidth(25),
                       right: ScreenUtil().setWidth(25),
                     ),
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text("Amministratore"),
-                          Icon(Icons.search),
-                        ],
-                      ),
-                      SeparatorHeight(10),
-                      Builder(
-                        builder: (context) {
-                          if (groups.admin.isEmpty)
-                            return Container(
-                              height: ScreenUtil().setHeight(150),
-                              child: Center(
-                                child: Text(
-                                  "Non sei amministratore di nessun gruppo",
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            );
-
-                          return GridView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: groups.admin.length,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 3 / 3,
-                            ),
-                            itemBuilder: (BuildContext context, int index) {
-                              Group group = groups.admin[index];
-                              group.isAdmin = true;
-                              return GestureDetector(
-                                child: Container(
-                                  margin: EdgeInsets.all(8),
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  color: Theme.of(context).accentColor,
-                                  child: Text(group.name),
-                                ),
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: CustomChip(
+                                label: "Amministratore",
+                                isSelected: firstSelected,
                                 onTap: () {
-                                  store.dispatch(SaveSelectedGroup(group));
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (_) => EventsPage(),
-                                    ),
-                                  );
+                                  if (!firstSelected)
+                                    setState(() {
+                                      firstSelected = !firstSelected;
+                                    });
                                 },
-                              );
-                            },
-                          );
-                        },
-                      ),
-                      SeparatorHeight(25),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text("Membro"),
-                          Icon(Icons.search),
-                        ],
-                      ),
-                      SeparatorHeight(10),
-                      Builder(
-                        builder: (context) {
-                          if (groups.member.isEmpty)
-                            return Container(
-                              height: ScreenUtil().setHeight(150),
-                              child: Center(
-                                child: Text(
-                                  "Non sei membro di nessun gruppo",
-                                  textAlign: TextAlign.center,
-                                ),
                               ),
-                            );
-
-                          return GridView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: groups.member.length,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 3 / 3,
                             ),
-                            itemBuilder: (BuildContext context, int index) {
-                              Group group = groups.member[index];
-                              group.isAdmin = false;
-                              return GestureDetector(
-                                child: Container(
-                                  margin: EdgeInsets.all(8),
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  color: Theme.of(context).accentColor,
+                            Expanded(
+                              child: CustomChip(
+                                label: "Membro",
+                                isSelected: !firstSelected,
+                                onTap: () {
+                                  if (firstSelected)
+                                    setState(() {
+                                      firstSelected = !firstSelected;
+                                    });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        SeparatorHeight(10),
+                        Builder(
+                          builder: (bContext) {
+                            if (firstSelected) {
+                              if (groups.admin.isEmpty)
+                                return Center(
                                   child: Text(
-                                    group.name,
+                                    "Non sei amministratore di nessun gruppo",
                                   ),
+                                );
+
+                              return Expanded(
+                                child: CustomListView(
+                                  key: UniqueKey(),
+                                  isAdmin: true,
+                                  store: store,
+                                  groups: groups.admin,
                                 ),
-                                onTap: () {
-                                  store.dispatch(SaveSelectedGroup(group));
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (_) => EventsPage(),
-                                    ),
-                                  );
-                                },
                               );
-                            },
-                          );
-                        },
-                      ),
-                    ],
+                            } else {
+                              if (groups.member.isEmpty)
+                                return Center(
+                                  child:
+                                      Text("Non sei membro di nessun gruppo"),
+                                );
+
+                              return Expanded(
+                                child: CustomListView(
+                                  key: UniqueKey(),
+                                  isAdmin: false,
+                                  store: store,
+                                  groups: groups.member,
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
