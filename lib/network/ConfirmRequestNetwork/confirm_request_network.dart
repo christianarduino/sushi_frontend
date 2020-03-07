@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:sushi/api/make_request.dart';
 import 'package:sushi/model/Response/ResponseStatus.dart';
 import 'package:sushi/model/Store/User.dart';

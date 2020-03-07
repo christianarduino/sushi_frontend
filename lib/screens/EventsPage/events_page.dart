@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sushi/model/Response/Events.dart';
 import 'package:sushi/model/Response/Groups.dart';
+import 'package:sushi/model/Response/ResponseStatus.dart';
+import 'package:sushi/model/Store/User.dart';
+import 'package:sushi/network/GroupDetailNetwork/group_detail_network.dart';
 import 'package:sushi/redux/store/AppState.dart';
 import 'package:sushi/screens/GroupDetailPage/group_detail_page.dart';
+import 'package:sushi/screens/HomePage/home_page.dart';
+import 'package:sushi/utils/popup.dart';
 
 class EventsPage extends StatefulWidget {
   @override
@@ -21,39 +27,74 @@ class _EventsPageState extends State<EventsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, Group>(
-        converter: (store) => store.state.selectedGroup.group,
-        builder: (context, group) {
+    return ProgressHUD(
+      child: StoreConnector<AppState, AppState>(
+        converter: (store) => store.state,
+        builder: (context, state) {
+          Group group = state.selectedGroup.group;
+          User loggedUser = state.loggedUser;
           return Scaffold(
             appBar: AppBar(
               title: Text(
                 group.name,
               ),
               actions: <Widget>[
-                Builder(
-                  builder: (context) {
-                    if (group.isAdmin)
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          right: ScreenUtil().setWidth(15),
-                        ),
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.people_outline,
-                          ),
-                          iconSize: ScreenUtil().setWidth(30),
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => GroupDetailPage(),
-                              ),
-                            );
-                          },
-                        ),
-                      );
+                Padding(
+                  padding: EdgeInsets.only(
+                    right: ScreenUtil().setWidth(15),
+                  ),
+                  child: Builder(builder: (bContext) {
+                    return IconButton(
+                      tooltip: "Exit",
+                      icon: Icon(
+                        group.isAdmin ? Icons.people_outline : Icons.close,
+                      ),
+                      iconSize: ScreenUtil().setWidth(30),
+                      onPressed: () async {
+                        if (group.isAdmin) {
+                          return Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => GroupDetailPage(),
+                            ),
+                          );
+                        }
 
-                    return SizedBox.shrink();
-                  },
+                        bool confirm = false;
+                        await Popup.confirm(
+                          context,
+                          "Sicuro di voler abbandonare il gruppo ${group.name}?",
+                          onCancel: () => Navigator.pop(context),
+                          onOk: () {
+                            confirm = true;
+                            Navigator.pop(context);
+                          },
+                        );
+
+                        if (confirm) {
+                          final progress = ProgressHUD.of(bContext);
+                          progress.show();
+                          List<String> ids = [loggedUser.id];
+                          ResponseStatus status =
+                              await GroupDetailNetwork.removeMembers(
+                            ids,
+                            group.id,
+                          );
+                          progress.dismiss();
+
+                          if (!status.success)
+                            return await Popup.error(context, status.data);
+
+                          await Popup.success(context, status.data);
+
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                builder: (context) => HomePage(),
+                              ),
+                              (Route<dynamic> route) => false);
+                        }
+                      },
+                    );
+                  }),
                 ),
               ],
             ),
@@ -82,12 +123,12 @@ class _EventsPageState extends State<EventsPage> {
                     if (events.isEmpty)
                       return Center(
                         child: Text(
-                          "Non hai ancora creato\nnessun evento per questo gruppo.\n\n\Premi + per crearne uno!",
+                          group.isAdmin
+                              ? "Non hai ancora creato\nnessun evento per questo gruppo.\n\n\Premi + per crearne uno!"
+                              : "L'amministratore del gruppo\nnon ha ancora creato nessun evento.\n\nIo gli farei una chiamata\nper andare a mangiare del buon sushi!",
                           textAlign: TextAlign.center,
                         ),
                       );
-
-                    return Column();
                   }
 
                   return Center(
@@ -99,6 +140,8 @@ class _EventsPageState extends State<EventsPage> {
               ),
             ),
           );
-        });
+        },
+      ),
+    );
   }
 }

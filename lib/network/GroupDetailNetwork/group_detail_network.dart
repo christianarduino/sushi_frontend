@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:http/http.dart';
 import 'package:sushi/api/make_request.dart';
 import 'package:sushi/model/Response/ResponseStatus.dart';
 
@@ -32,6 +33,25 @@ class GroupDetailNetwork {
       return ResponseStatus(true, "Utenti aggiunti con successo!");
     } catch (e) {
       print(e);
+      return ResponseStatus(false, "Si è verificato un errore. Riprova");
+    }
+  }
+
+  static Future<ResponseStatus> removeMembers(
+    List<String> ids,
+    String groupId,
+  ) async {
+    try {
+      String json = jsonEncode({"userIds": ids});
+      print("after json");
+      dynamic decodedJson = await MakeRequest.post(
+        "group/user/delete/$groupId",
+        json,
+      );
+
+      print(decodedJson);
+      return ResponseStatus(!decodedJson['error'], decodedJson['message']);
+    } catch (e) {
       return ResponseStatus(false, "Si è verificato un errore. Riprova");
     }
   }
